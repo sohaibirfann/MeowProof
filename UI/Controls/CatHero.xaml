@@ -3,33 +3,39 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              x:Name="Root">
     <Viewbox Stretch="Uniform">
-        <!-- viewBox 0 0 120 130, overflow visible (tail/badge stay inside this box) -->
-        <Canvas Width="120" Height="130">
-            <!-- tail -->
-            <Path Stroke="{Binding Fill, ElementName=Root}" StrokeThickness="11"
-                  StrokeStartLineCap="Round" StrokeEndLineCap="Round"
-                  Data="M86,112 C108,112 110,84 93,85" />
-            <!-- body bell -->
+        <!-- CatLoaf logo (viewBox 0 0 116 108), padded to 116 tall so the lock badge fits -->
+        <Canvas Width="116" Height="116">
+            <!-- big ears -->
+            <Path Fill="{Binding Fill, ElementName=Root}" Data="M30,56 L33,18 L58,50 Z" />
+            <Path Fill="{Binding Fill, ElementName=Root}" Data="M58,50 L83,18 L86,56 Z" />
+            <!-- loaf body -->
             <Path Fill="{Binding Fill, ElementName=Root}"
-                  Data="M60,50 C43,50 31,71 29,96 C28,109 38,119 60,119 C82,119 92,109 91,96 C89,71 77,50 60,50 Z" />
-            <!-- ears -->
-            <Path Fill="{Binding Fill, ElementName=Root}" Data="M45,27 L33,6 L55,21 Z" />
-            <Path Fill="{Binding Fill, ElementName=Root}" Data="M75,27 L87,6 L65,21 Z" />
-            <!-- head (circle cx60 cy43 r24) -->
-            <Ellipse Canvas.Left="36" Canvas.Top="19" Width="48" Height="48"
-                     Fill="{Binding Fill, ElementName=Root}" />
-            <!-- lock badge -->
+                  Data="M12,100 C12,54 30,42 58,42 C86,42 104,54 104,100 Z" />
+            <!-- tail curl -->
+            <Path Stroke="{Binding Fill, ElementName=Root}" StrokeThickness="11"
+                  StrokeStartLineCap="Round" StrokeEndLineCap="Round" Fill="{x:Null}"
+                  Data="M104,92 c15,1 14,-18 1,-17" />
+            <!-- tucked-paw split -->
+            <Path Stroke="{StaticResource Bg}" StrokeThickness="3.5" StrokeStartLineCap="Round"
+                  Opacity="0.22" Data="M58,100 V82" />
+            <!-- calm face: two eyes + nose -->
+            <Path Stroke="{StaticResource Bg}" StrokeThickness="2.6" StrokeStartLineCap="Round" StrokeEndLineCap="Round"
+                  Fill="{x:Null}" Data="M40,74 q6,5 12,0" />
+            <Path Stroke="{StaticResource Bg}" StrokeThickness="2.6" StrokeStartLineCap="Round" StrokeEndLineCap="Round"
+                  Fill="{x:Null}" Data="M64,74 q6,5 12,0" />
+            <Path Fill="{StaticResource Bg}" Data="M58,79 l-4,4 h8 Z" />
+            <!-- lock badge (lower-right) -->
             <Canvas Visibility="{Binding BadgeVisibility, ElementName=Root}">
-                <!-- circle cx97 cy103 r17 -->
-                <Ellipse Canvas.Left="80" Canvas.Top="86" Width="34" Height="34"
+                <!-- circle cx96 cy96 r15 -->
+                <Ellipse Canvas.Left="81" Canvas.Top="81" Width="30" Height="30"
                          Fill="{Binding BadgeFill, ElementName=Root}"
                          Stroke="{StaticResource Bg}" StrokeThickness="3.5" />
-                <!-- padlock body: rect x-7 y-1.5 w14 h11 rx2.5 around (97,103) -->
-                <Rectangle Canvas.Left="90" Canvas.Top="101.5" Width="14" Height="11" RadiusX="2.5" RadiusY="2.5"
+                <!-- padlock body around (96,97.5) -->
+                <Rectangle Canvas.Left="89.5" Canvas.Top="92.5" Width="13" Height="10" RadiusX="2.4" RadiusY="2.4"
                            Fill="{StaticResource Bg}" />
                 <!-- shackle -->
-                <Path Stroke="{StaticResource Bg}" StrokeThickness="2.6" StrokeStartLineCap="Round" StrokeEndLineCap="Round"
-                      Data="M93,101.5 V98 A4,4 0 0 1 101,98 V101.5" />
+                <Path Stroke="{StaticResource Bg}" StrokeThickness="2.4" StrokeStartLineCap="Round" StrokeEndLineCap="Round"
+                      Fill="{x:Null}" Data="M92.4,92.5 V89 A3.6,3.6 0 0 1 99.6,89 V92.5" />
             </Canvas>
         </Canvas>
     </Viewbox>

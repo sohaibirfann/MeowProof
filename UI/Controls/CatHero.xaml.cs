@@ -13,7 +13,7 @@ public partial class CatHero : UserControl
 
     public static readonly DependencyProperty FillProperty = DependencyProperty.Register(
         nameof(Fill), typeof(Brush), typeof(CatHero),
-        new PropertyMetadata(new SolidColorBrush(Color.FromRgb(0x87, 0x8D, 0x97))));
+        new PropertyMetadata(new SolidColorBrush(Color.FromRgb(0x8C, 0x84, 0x78))));
 
     public Brush Fill
     {
@@ -23,7 +23,7 @@ public partial class CatHero : UserControl
 
     public static readonly DependencyProperty BadgeFillProperty = DependencyProperty.Register(
         nameof(BadgeFill), typeof(Brush), typeof(CatHero),
-        new PropertyMetadata(new SolidColorBrush(Color.FromRgb(0x4E, 0xCD, 0xC4))));
+        new PropertyMetadata(new SolidColorBrush(Color.FromRgb(0xCC, 0x7C, 0x57))));
 
     public Brush BadgeFill
     {

@@ -37,13 +37,13 @@ public partial class MainWindow : Window
 
         if (locked)
         {
-            StatusPill.Background = Brush("AccentGlow");
+            StatusPill.Background = Brush("AccentSoft");
             PillDot.Fill = Brush("Accent");
-            PillText.Foreground = Brush("Accent");
+            PillText.Foreground = Brush("AccentDeep");
             PillText.Text = _lock.State == LockState.StealthLocked ? "Stealth" : "Locked";
 
             PrimaryActionButton.Background = Brush("Surface2");
-            PrimaryActionButton.BorderBrush = new SolidColorBrush(Color.FromArgb(0x40, 0xFF, 0x7A, 0x7A));
+            PrimaryActionButton.BorderBrush = new SolidColorBrush(Color.FromArgb(0x40, 0xD9, 0x64, 0x5C));
             PrimaryText.Text = "Unlock Keyboard";
             PrimaryText.Foreground = Brush("Red");
             PrimaryIcon.Stroke = Brush("Red");
@@ -58,9 +58,9 @@ public partial class MainWindow : Window
             PrimaryActionButton.Background = Gradient("AccentGradient");
             PrimaryActionButton.BorderBrush = System.Windows.Media.Brushes.Transparent;
             PrimaryText.Text = "Lock Keyboard";
-            var dark = new SolidColorBrush(Color.FromRgb(0x06, 0x20, 0x1E));
-            PrimaryText.Foreground = dark;
-            PrimaryIcon.Stroke = dark;
+            var onAccent = System.Windows.Media.Brushes.White;
+            PrimaryText.Foreground = onAccent;
+            PrimaryIcon.Stroke = onAccent;
         }
     }
 

@@ -11,14 +11,14 @@ namespace MeowProof.Helpers;
 /// </summary>
 public static class IconFactory
 {
-    // Palette from the UI mockup (teal accent was the chosen direction).
-    private static readonly Color Accent = ColorTranslator.FromHtml("#4ECDC4"); // soft teal (locked)
-    private static readonly Color Muted = ColorTranslator.FromHtml("#CFD3DA");  // light grey (unlocked)
+    // Palette from the UI mockup (warm clay/terracotta accent direction).
+    private static readonly Color Accent = ColorTranslator.FromHtml("#CC7C57"); // warm clay (locked)
+    private static readonly Color Muted = ColorTranslator.FromHtml("#8C8478");  // warm grey (unlocked)
 
     [DllImport("user32.dll", SetLastError = true)]
     private static extern bool DestroyIcon(IntPtr handle);
 
-    /// <summary>Creates a simple cat-head tray icon. Amber when locked, grey when unlocked.</summary>
+    /// <summary>Creates a cat-loaf tray icon. Clay when locked, grey when unlocked.</summary>
     public static Icon CreateTrayIcon(bool locked)
     {
         Color color = locked ? Accent : Muted;
@@ -30,24 +30,49 @@ public static class IconFactory
             g.Clear(Color.Transparent);
 
             using var brush = new SolidBrush(color);
+            var cream = ColorTranslator.FromHtml("#FBF7F1");
 
-            // Ears (two triangles).
-            Point[] leftEar = { new(6, 12), new(11, 4), new(15, 13) };
-            Point[] rightEar = { new(26, 12), new(21, 4), new(17, 13) };
-            g.FillPolygon(brush, leftEar);
-            g.FillPolygon(brush, rightEar);
+            // Draw the loaf in its native 116-unit space, scaled to fit 32px.
+            var state = g.Save();
+            g.TranslateTransform(1f, 2.5f);
+            g.ScaleTransform(0.25f, 0.25f);
 
-            // Head.
-            g.FillEllipse(brush, 6, 9, 20, 18);
+            // Ears.
+            g.FillPolygon(brush, new[] { new PointF(30, 56), new PointF(33, 18), new PointF(58, 50) });
+            g.FillPolygon(brush, new[] { new PointF(58, 50), new PointF(83, 18), new PointF(86, 56) });
+
+            // Loaf body.
+            using (var body = new GraphicsPath())
+            {
+                body.AddBezier(12, 100, 12, 54, 30, 42, 58, 42);
+                body.AddBezier(58, 42, 86, 42, 104, 54, 104, 100);
+                body.CloseFigure();
+                g.FillPath(brush, body);
+            }
+
+            // Tail curl.
+            using (var tail = new Pen(color, 11f) { StartCap = LineCap.Round, EndCap = LineCap.Round })
+                g.DrawBezier(tail, 104, 92, 119, 93, 118, 74, 105, 75);
+
+            // Calm face (cream eyes + nose).
+            using (var facePen = new Pen(cream, 4f) { StartCap = LineCap.Round, EndCap = LineCap.Round })
+            {
+                g.DrawBezier(facePen, 40, 74, 44, 77.33f, 48, 77.33f, 52, 74);
+                g.DrawBezier(facePen, 64, 74, 68, 77.33f, 72, 77.33f, 76, 74);
+            }
+            using (var nose = new SolidBrush(cream))
+                g.FillPolygon(nose, new[] { new PointF(58, 79), new PointF(54, 83), new PointF(62, 83) });
+
+            g.Restore(state);
 
             // Lock badge when locked: accent dot at lower-right with a bg-colored padlock.
             if (locked)
             {
                 using var badge = new SolidBrush(Accent);
                 g.FillEllipse(badge, 19, 19, 12, 12);
-                using var dark = new SolidBrush(ColorTranslator.FromHtml("#15171b"));
+                using var dark = new SolidBrush(ColorTranslator.FromHtml("#FBF7F1"));
                 g.FillRectangle(dark, 23, 25, 5, 4);        // lock body
-                using var shackle = new Pen(ColorTranslator.FromHtml("#15171b"), 1.3f);
+                using var shackle = new Pen(ColorTranslator.FromHtml("#FBF7F1"), 1.3f);
                 g.DrawArc(shackle, 23.5f, 22.5f, 4, 4, 180, 180); // shackle
             }
         }
