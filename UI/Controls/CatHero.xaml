@@ -1,0 +1,36 @@
+<UserControl x:Class="MeowProof.UI.Controls.CatHero"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             x:Name="Root">
+    <Viewbox Stretch="Uniform">
+        <!-- viewBox 0 0 120 130, overflow visible (tail/badge stay inside this box) -->
+        <Canvas Width="120" Height="130">
+            <!-- tail -->
+            <Path Stroke="{Binding Fill, ElementName=Root}" StrokeThickness="11"
+                  StrokeStartLineCap="Round" StrokeEndLineCap="Round"
+                  Data="M86,112 C108,112 110,84 93,85" />
+            <!-- body bell -->
+            <Path Fill="{Binding Fill, ElementName=Root}"
+                  Data="M60,50 C43,50 31,71 29,96 C28,109 38,119 60,119 C82,119 92,109 91,96 C89,71 77,50 60,50 Z" />
+            <!-- ears -->
+            <Path Fill="{Binding Fill, ElementName=Root}" Data="M45,27 L33,6 L55,21 Z" />
+            <Path Fill="{Binding Fill, ElementName=Root}" Data="M75,27 L87,6 L65,21 Z" />
+            <!-- head (circle cx60 cy43 r24) -->
+            <Ellipse Canvas.Left="36" Canvas.Top="19" Width="48" Height="48"
+                     Fill="{Binding Fill, ElementName=Root}" />
+            <!-- lock badge -->
+            <Canvas Visibility="{Binding BadgeVisibility, ElementName=Root}">
+                <!-- circle cx97 cy103 r17 -->
+                <Ellipse Canvas.Left="80" Canvas.Top="86" Width="34" Height="34"
+                         Fill="{Binding BadgeFill, ElementName=Root}"
+                         Stroke="{StaticResource Bg}" StrokeThickness="3.5" />
+                <!-- padlock body: rect x-7 y-1.5 w14 h11 rx2.5 around (97,103) -->
+                <Rectangle Canvas.Left="90" Canvas.Top="101.5" Width="14" Height="11" RadiusX="2.5" RadiusY="2.5"
+                           Fill="{StaticResource Bg}" />
+                <!-- shackle -->
+                <Path Stroke="{StaticResource Bg}" StrokeThickness="2.6" StrokeStartLineCap="Round" StrokeEndLineCap="Round"
+                      Data="M93,101.5 V98 A4,4 0 0 1 101,98 V101.5" />
+            </Canvas>
+        </Canvas>
+    </Viewbox>
+</UserControl>
