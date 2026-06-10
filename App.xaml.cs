@@ -19,6 +19,16 @@ public partial class App : System.Windows.Application
     {
         base.OnStartup(e);
 
+        // Surface unhandled UI exceptions instead of silently dying, and keep
+        // running where it's safe to.
+        DispatcherUnhandledException += (_, ex) =>
+        {
+            LogCrash(ex.Exception);
+            MessageBox.Show(ex.Exception.Message, "MeowProof hit a snag",
+                MessageBoxButton.OK, MessageBoxImage.Warning);
+            ex.Handled = true;
+        };
+
         AppSettings.Load();
 
         // If "Launch at Login" is on, keep the registered path pointing at
@@ -70,6 +80,19 @@ public partial class App : System.Windows.Application
         // reclaim the keyboard hooks for us. We deliberately do NOT call
         // UnhookWindowsHookEx here — on a low-level hook it can block.
         TerminateProcess(GetCurrentProcess(), 0);
+    }
+
+    private static void LogCrash(Exception ex)
+    {
+        try
+        {
+            var path = System.IO.Path.Combine(
+                Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData),
+                "MeowProof", "crash.log");
+            System.IO.Directory.CreateDirectory(System.IO.Path.GetDirectoryName(path)!);
+            System.IO.File.AppendAllText(path, $"{DateTime.Now:u}\n{ex}\n\n");
+        }
+        catch { /* logging must never throw */ }
     }
 
     private void UpdateOverlays()

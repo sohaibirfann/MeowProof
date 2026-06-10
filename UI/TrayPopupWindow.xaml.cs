@@ -10,6 +10,8 @@ public partial class TrayPopupWindow : Window
     private readonly LockService _lock;
     private readonly System.Drawing.Point _cursorPos;
     private bool _loading;
+    private bool _activatedOnce;
+    private bool _closing;
 
     public event EventHandler? OpenRequested;
     public event EventHandler? SettingsRequested;
@@ -34,9 +36,18 @@ public partial class TrayPopupWindow : Window
         // Only close on deactivation after we have been properly activated
         // at least once — prevents false-close during the initial Win32
         // SetForegroundWindow / WM_ACTIVATE dance.
-        bool activatedOnce = false;
-        Activated   += (_, _) => activatedOnce = true;
-        Deactivated += (_, _) => { if (activatedOnce) Close(); };
+        Activated   += (_, _) => _activatedOnce = true;
+        Deactivated += (_, _) => { if (_activatedOnce) CloseOnce(); };
+    }
+
+    /// <summary>Closes exactly once. Guards against the re-entrant Close that
+    /// happens when an action both dismisses the popup and shows another window,
+    /// which deactivates us and fires Deactivated mid-close.</summary>
+    private void CloseOnce()
+    {
+        if (_closing) return;
+        _closing = true;
+        Close();
     }
 
     private void UpdateState()
@@ -69,7 +80,7 @@ public partial class TrayPopupWindow : Window
         else
             _lock.Lock();
 
-        Close();
+        CloseOnce();
     }
 
     private void ToggleLogin_Changed(object sender, RoutedEventArgs e)
@@ -91,13 +102,13 @@ public partial class TrayPopupWindow : Window
 
     private void Open_Click(object sender, RoutedEventArgs e)
     {
-        Close();
+        CloseOnce();
         OpenRequested?.Invoke(this, EventArgs.Empty);
     }
 
     private void Settings_Click(object sender, RoutedEventArgs e)
     {
-        Close();
+        CloseOnce();
         SettingsRequested?.Invoke(this, EventArgs.Empty);
     }
 

@@ -1,13 +1,26 @@
+using System.IO;
 using System.Windows;
+using System.Windows.Controls;
 using System.Windows.Input;
 using MeowProof.Models;
 using MeowProof.Services;
+using Microsoft.Win32;
 
 namespace MeowProof.UI;
 
 public partial class SettingsWindow : Window
 {
     private bool _loading;
+
+    // Sentinel value for the "Import custom…" row.
+    private const string ImportValue = "__import__";
+
+    private sealed class SoundOption
+    {
+        public required string Display { get; init; }
+        public required string Value { get; init; } // built-in name, "Custom", or ImportValue
+        public override string ToString() => Display;
+    }
 
     public SettingsWindow()
     {
@@ -25,12 +38,81 @@ public partial class SettingsWindow : Window
         ToggleBlockedSound.IsChecked = s.PlayBlockedSound;
         ToggleLockSound.IsChecked    = s.PlayLockSound;
         ToggleCatDetection.IsChecked = s.CatDetectionEnabled;
-        UpdateSoundLabel();
+        PopulateSounds();
         _loading = false;
     }
 
-    private void UpdateSoundLabel() =>
-        SelectedSoundLabel.Text = AppSettings.Current.SelectedSound;
+    private void PopulateSounds()
+    {
+        var options = new List<SoundOption>();
+        foreach (var name in SoundService.BuiltinSounds)
+            options.Add(new SoundOption { Display = name, Value = name });
+
+        if (AppSettings.Current.CustomSoundPath is { } path)
+            options.Add(new SoundOption { Display = Path.GetFileName(path), Value = "Custom" });
+
+        options.Add(new SoundOption { Display = "Import custom…", Value = ImportValue });
+
+        SoundCombo.ItemsSource = options;
+
+        var current = AppSettings.Current.SelectedSound;
+        SoundCombo.SelectedItem = options.Find(o => o.Value == current) ?? options[0];
+    }
+
+    private void SoundCombo_SelectionChanged(object sender, SelectionChangedEventArgs e)
+    {
+        if (_loading || SoundCombo.SelectedItem is not SoundOption opt) return;
+
+        if (opt.Value == ImportValue)
+        {
+            ImportCustomSound();
+            return;
+        }
+
+        AppSettings.Current.SelectedSound = opt.Value;
+        AppSettings.Save();
+        SoundService.Preview(opt.Value);
+    }
+
+    private void ImportCustomSound()
+    {
+        var dlg = new OpenFileDialog
+        {
+            Title = "Import Sound",
+            Filter = "Audio files (*.wav;*.mp3)|*.wav;*.mp3",
+            CheckFileExists = true,
+        };
+
+        if (dlg.ShowDialog(this) == true)
+        {
+            var destDir = Path.Combine(
+                Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData),
+                "MeowProof", "Sounds");
+            Directory.CreateDirectory(destDir);
+            var dest = Path.Combine(destDir, Path.GetFileName(dlg.FileName));
+            if (!string.Equals(dlg.FileName, dest, StringComparison.OrdinalIgnoreCase))
+                File.Copy(dlg.FileName, dest, overwrite: true);
+
+            AppSettings.Current.CustomSoundPath = dest;
+            AppSettings.Current.SelectedSound = "Custom";
+            AppSettings.Save();
+
+            _loading = true;
+            PopulateSounds();
+            _loading = false;
+
+            SoundService.Preview("Custom");
+        }
+        else
+        {
+            // Cancelled — revert the dropdown to the previously selected sound.
+            _loading = true;
+            var current = AppSettings.Current.SelectedSound;
+            if (SoundCombo.ItemsSource is IEnumerable<SoundOption> items)
+                SoundCombo.SelectedItem = System.Linq.Enumerable.FirstOrDefault(items, o => o.Value == current);
+            _loading = false;
+        }
+    }
 
     private void ToggleStartup_Changed(object sender, RoutedEventArgs e)
     {
@@ -74,13 +156,6 @@ public partial class SettingsWindow : Window
         if (_loading) return;
         AppSettings.Current.CatDetectionEnabled = ToggleCatDetection.IsChecked == true;
         AppSettings.Save();
-    }
-
-    private void ChooseSound_Click(object sender, RoutedEventArgs e)
-    {
-        var picker = new SoundPickerWindow { Owner = this };
-        if (picker.ShowDialog() == true)
-            UpdateSoundLabel();
     }
 
     private void TitleBar_MouseDown(object sender, MouseButtonEventArgs e)
