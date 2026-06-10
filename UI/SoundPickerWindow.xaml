@@ -32,7 +32,8 @@
             </Border>
 
             <!-- Sound list -->
-            <ScrollViewer Grid.Row="1" VerticalScrollBarVisibility="Auto" MaxHeight="340">
+            <ScrollViewer Grid.Row="1" VerticalScrollBarVisibility="Auto" MaxHeight="340"
+                          Style="{StaticResource ThinScrollViewer}">
                 <StackPanel Margin="12,10,12,10" x:Name="SoundList" />
             </ScrollViewer>
 

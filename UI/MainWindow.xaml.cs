@@ -76,7 +76,21 @@ public partial class MainWindow : Window
             DragMove();
     }
 
-    private void Minimize_Click(object sender, RoutedEventArgs e) => WindowState = WindowState.Minimized;
+    // Borderless WPF windows (WindowStyle=None + AllowsTransparency) render a
+    // broken stub when truly minimized, so "minimize" hides to the tray instead.
+    private void Minimize_Click(object sender, RoutedEventArgs e) => Hide();
+
+    // Catch minimize from the taskbar button too (when Show in Taskbar is on):
+    // snap back to Normal and hide to the tray.
+    protected override void OnStateChanged(EventArgs e)
+    {
+        if (WindowState == WindowState.Minimized)
+        {
+            WindowState = WindowState.Normal;
+            Hide();
+        }
+        base.OnStateChanged(e);
+    }
 
     private void Close_Click(object sender, RoutedEventArgs e) => Hide();
 

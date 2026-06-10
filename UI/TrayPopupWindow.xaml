@@ -8,12 +8,15 @@
         FontFamily="{StaticResource UiFont}" Foreground="{StaticResource Text}"
         TextOptions.TextFormattingMode="Ideal" UseLayoutRounding="True">
 
-    <Border Margin="10" Background="{StaticResource Bg}"
+    <Border Margin="18" Background="{StaticResource Bg}"
             BorderBrush="{StaticResource Border}" BorderThickness="1"
             CornerRadius="14">
         <Border.Effect>
-            <DropShadowEffect BlurRadius="28" ShadowDepth="4" Direction="270"
-                              Color="#22000000" Opacity="1" RenderingBias="Quality"/>
+            <!-- Keep BlurRadius within the Margin so the soft shadow fades out
+                 inside the transparent window instead of clipping to a hard edge.
+                 DropShadowEffect takes its alpha from Opacity, not the colour. -->
+            <DropShadowEffect BlurRadius="16" ShadowDepth="3" Direction="270"
+                              Color="#000000" Opacity="0.18" RenderingBias="Quality"/>
         </Border.Effect>
 
         <StackPanel>
