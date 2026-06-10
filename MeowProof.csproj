@@ -28,4 +28,14 @@
     <Resource Include="Assets\Fonts\Manrope-ExtraBold.ttf" />
   </ItemGroup>
 
+  <ItemGroup>
+    <EmbeddedResource Include="Assets\Sounds\silence.wav" />
+    <EmbeddedResource Include="Assets\Sounds\bell.wav" />
+    <EmbeddedResource Include="Assets\Sounds\alarm.wav" />
+    <EmbeddedResource Include="Assets\Sounds\meow.wav" />
+    <EmbeddedResource Include="Assets\Sounds\dog-bark.wav" />
+    <EmbeddedResource Include="Assets\Sounds\cat-hiss.wav" />
+    <EmbeddedResource Include="Assets\Sounds\warning.wav" />
+  </ItemGroup>
+
 </Project>

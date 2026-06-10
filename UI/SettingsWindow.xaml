@@ -95,6 +95,22 @@
                                 <ToggleButton x:Name="ToggleLockSound" Style="{StaticResource ToggleSwitch}"
                                               HorizontalAlignment="Right" Checked="ToggleLockSound_Changed" Unchecked="ToggleLockSound_Changed" />
                             </Grid>
+                            <Border BorderBrush="{StaticResource BorderSoft}" BorderThickness="0,1,0,0" Margin="16,0" />
+
+                            <Button x:Name="ChooseSoundButton" Click="ChooseSound_Click"
+                                    Background="Transparent" BorderThickness="0" Cursor="Hand" Padding="0">
+                                <Grid Margin="16,14,16,14" Width="316">
+                                    <StackPanel>
+                                        <TextBlock Text="Sound" FontSize="13.5" FontWeight="SemiBold" />
+                                        <TextBlock x:Name="SelectedSoundLabel" FontSize="11.5"
+                                                   Foreground="{StaticResource TextFaint}" Margin="0,2,0,0" />
+                                    </StackPanel>
+                                    <Path HorizontalAlignment="Right" VerticalAlignment="Center"
+                                          Data="M9,6 L15,12 L9,18" Stroke="{StaticResource TextFaint}"
+                                          StrokeThickness="2" StrokeLineJoin="Round" StrokeStartLineCap="Round" StrokeEndLineCap="Round"
+                                          Width="10" Height="14" Stretch="Uniform" />
+                                </Grid>
+                            </Button>
                         </StackPanel>
                     </Border>
 

@@ -28,6 +28,7 @@ public sealed class LockService : IDisposable
     public LockService()
     {
         _hook = new KeyboardHook(Unlock);
+        _hook.KeyBlocked += SoundService.PlayKeyBlocked;
     }
 
     public void Lock()
@@ -36,6 +37,7 @@ public sealed class LockService : IDisposable
         State = LockState.Locked;
         _hook.Install();
         SleepPreventer.Prevent();
+        SoundService.PlayLocked();
         OnChanged();
     }
 
@@ -45,6 +47,7 @@ public sealed class LockService : IDisposable
         State = LockState.StealthLocked;
         _hook.Install();
         SleepPreventer.Prevent();
+        SoundService.PlayLocked();
         OnChanged();
     }
 

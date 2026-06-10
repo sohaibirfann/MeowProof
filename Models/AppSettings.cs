@@ -11,8 +11,9 @@ public class AppSettings
     public bool   CatDetectionEnabled   { get; set; } = true;
     public bool   PlayBlockedSound      { get; set; } = true;
     public bool   PlayLockSound         { get; set; } = false;
-    public string SelectedSound         { get; set; } = "Warning: Cat on Keyboard";
-    public int    OverlayOpacity        { get; set; } = 65;
+    public string  SelectedSound         { get; set; } = "Warning: Cat on Keyboard";
+    public string? CustomSoundPath      { get; set; } = null;
+    public int     OverlayOpacity       { get; set; } = 65;
     public string UnlockShortcut        { get; set; } = "Ctrl+Shift+L";
 
     private static readonly string FilePath = Path.Combine(

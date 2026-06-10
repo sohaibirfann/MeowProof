@@ -25,8 +25,12 @@ public partial class SettingsWindow : Window
         ToggleBlockedSound.IsChecked = s.PlayBlockedSound;
         ToggleLockSound.IsChecked    = s.PlayLockSound;
         ToggleCatDetection.IsChecked = s.CatDetectionEnabled;
+        UpdateSoundLabel();
         _loading = false;
     }
+
+    private void UpdateSoundLabel() =>
+        SelectedSoundLabel.Text = AppSettings.Current.SelectedSound;
 
     private void ToggleStartup_Changed(object sender, RoutedEventArgs e)
     {
@@ -70,6 +74,13 @@ public partial class SettingsWindow : Window
         if (_loading) return;
         AppSettings.Current.CatDetectionEnabled = ToggleCatDetection.IsChecked == true;
         AppSettings.Save();
+    }
+
+    private void ChooseSound_Click(object sender, RoutedEventArgs e)
+    {
+        var picker = new SoundPickerWindow { Owner = this };
+        if (picker.ShowDialog() == true)
+            UpdateSoundLabel();
     }
 
     private void TitleBar_MouseDown(object sender, MouseButtonEventArgs e)

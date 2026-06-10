@@ -19,6 +19,9 @@ public sealed class KeyboardHook : IDisposable
     private bool _ctrlDown;
     private bool _shiftDown;
 
+    /// <summary>Fired on every key-down that is swallowed (not modifiers, not the unlock combo).</summary>
+    public event Action? KeyBlocked;
+
     public bool IsInstalled => _hook != IntPtr.Zero;
 
     public KeyboardHook(Action onUnlock)
@@ -70,6 +73,8 @@ public sealed class KeyboardHook : IDisposable
                 return (IntPtr)1;
             }
 
+            // Regular key down — notify listeners before swallowing.
+            if (down) KeyBlocked?.Invoke();
             return (IntPtr)1;
         }
 
