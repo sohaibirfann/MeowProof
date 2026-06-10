@@ -39,4 +39,25 @@ internal static class Win32
     public const int VK_LSHIFT   = 0xA0;
     public const int VK_RSHIFT   = 0xA1;
     public const int VK_L        = 0x4C;
+
+    // Acrylic / glassmorphism overlay
+    [DllImport("user32.dll")]
+    public static extern int SetWindowCompositionAttribute(IntPtr hwnd, ref WindowCompositionAttributeData data);
+
+    [StructLayout(LayoutKind.Sequential)]
+    public struct AccentPolicy
+    {
+        public int AccentState;    // 4 = ACCENT_ENABLE_ACRYLICBLURBEHIND
+        public int AccentFlags;
+        public uint GradientColor; // AABBGGRR tint
+        public int AnimationId;
+    }
+
+    [StructLayout(LayoutKind.Sequential)]
+    public struct WindowCompositionAttributeData
+    {
+        public int Attribute;      // 19 = WCA_ACCENT_POLICY
+        public IntPtr Data;
+        public int SizeOfData;
+    }
 }

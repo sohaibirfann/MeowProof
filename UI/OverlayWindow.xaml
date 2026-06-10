@@ -1,0 +1,58 @@
+<Window x:Class="MeowProof.UI.OverlayWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:ctl="clr-namespace:MeowProof.UI.Controls"
+        WindowStyle="None"
+        AllowsTransparency="True"
+        Background="Transparent"
+        ShowInTaskbar="False"
+        Topmost="True"
+        WindowStartupLocation="Manual"
+        FontFamily="/Assets/Fonts/#Manrope">
+
+    <Grid>
+        <StackPanel VerticalAlignment="Center" HorizontalAlignment="Center">
+
+            <!-- Cat loaf in locked state -->
+            <ctl:CatHero x:Name="OverlayHero" Width="130" Height="130"
+                         Locked="True" Fill="White" BadgeFill="#CC7C57" />
+
+            <!-- Title -->
+            <TextBlock Text="Keyboard Locked"
+                       FontSize="32" FontWeight="ExtraBold"
+                       Foreground="White" HorizontalAlignment="Center"
+                       Margin="0,22,0,0"
+                       TextOptions.TextFormattingMode="Ideal" />
+
+            <!-- Shortcut hint -->
+            <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" Margin="0,14,0,0">
+                <TextBlock Text="Press" VerticalAlignment="Center"
+                           FontSize="14" Foreground="#99FFFFFF" />
+
+                <Border Margin="7,0,0,0" Height="26" CornerRadius="6" Padding="9,0,9,0"
+                        Background="#18FFFFFF" BorderBrush="#33FFFFFF" BorderThickness="1,1,1,2">
+                    <TextBlock Text="Ctrl" VerticalAlignment="Center"
+                               FontSize="12" FontWeight="Bold" Foreground="White" />
+                </Border>
+                <TextBlock Text="+" Margin="5,0" VerticalAlignment="Center"
+                           FontSize="11" Foreground="#55FFFFFF" />
+                <Border Height="26" CornerRadius="6" Padding="9,0,9,0"
+                        Background="#18FFFFFF" BorderBrush="#33FFFFFF" BorderThickness="1,1,1,2">
+                    <TextBlock Text="Shift" VerticalAlignment="Center"
+                               FontSize="12" FontWeight="Bold" Foreground="White" />
+                </Border>
+                <TextBlock Text="+" Margin="5,0" VerticalAlignment="Center"
+                           FontSize="11" Foreground="#55FFFFFF" />
+                <Border Height="26" CornerRadius="6" Padding="9,0,9,0"
+                        Background="#18FFFFFF" BorderBrush="#33FFFFFF" BorderThickness="1,1,1,2">
+                    <TextBlock Text="L" VerticalAlignment="Center"
+                               FontSize="12" FontWeight="Bold" Foreground="White" />
+                </Border>
+
+                <TextBlock Text="to unlock" Margin="7,0,0,0" VerticalAlignment="Center"
+                           FontSize="14" Foreground="#99FFFFFF" />
+            </StackPanel>
+
+        </StackPanel>
+    </Grid>
+</Window>
