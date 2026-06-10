@@ -10,6 +10,27 @@
     <Nullable>enable</Nullable>
     <LangVersion>12</LangVersion>
     <ImplicitUsings>enable</ImplicitUsings>
+    <ApplicationIcon>Assets\meowproof.ico</ApplicationIcon>
+
+    <!-- Assembly / product metadata -->
+    <Product>MeowProof</Product>
+    <AssemblyTitle>MeowProof</AssemblyTitle>
+    <Description>Locks your keyboard so your cat can't interfere.</Description>
+    <Company>MeowProof</Company>
+    <Version>1.0.0</Version>
+    <FileVersion>1.0.0.0</FileVersion>
+    <AssemblyVersion>1.0.0.0</AssemblyVersion>
+  </PropertyGroup>
+
+  <!-- Single-file self-contained release: one MeowProof.exe, no install needed.
+       Build with: dotnet publish -c Release -->
+  <PropertyGroup Condition="'$(Configuration)' == 'Release'">
+    <RuntimeIdentifier>win-x64</RuntimeIdentifier>
+    <SelfContained>true</SelfContained>
+    <PublishSingleFile>true</PublishSingleFile>
+    <IncludeNativeLibrariesForSelfExtract>true</IncludeNativeLibrariesForSelfExtract>
+    <EnableCompressionInSingleFile>true</EnableCompressionInSingleFile>
+    <DebugType>none</DebugType>
   </PropertyGroup>
 
   <!-- UseWindowsForms adds System.Windows.Forms and System.Drawing as global usings,
