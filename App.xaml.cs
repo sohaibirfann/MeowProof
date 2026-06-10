@@ -63,7 +63,10 @@ public partial class App : System.Windows.Application
         _tray.QuitRequested     += (_, _) => Quit();
         _tray.OpenRequested     += (_, _) => ShowMain();
         _tray.SettingsRequested += (_, _) => OpenSettings();
+        _tray.UpdateRequested   += async (_, _) => { await UpdateService.DownloadAndApplyAsync(); Quit(); };
         _tray.Start();
+
+        _ = UpdateService.CheckAsync();
 
         ShowMain();
     }

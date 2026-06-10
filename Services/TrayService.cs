@@ -21,6 +21,7 @@ public sealed class TrayService : IDisposable
     public event EventHandler? QuitRequested;
     public event EventHandler? OpenRequested;
     public event EventHandler? SettingsRequested;
+    public event EventHandler? UpdateRequested;
 
     public TrayService(LockService lockService)
     {
@@ -71,6 +72,7 @@ public sealed class TrayService : IDisposable
             _popup.OpenRequested     += (_, _) => OpenRequested?.Invoke(this, EventArgs.Empty);
             _popup.SettingsRequested += (_, _) => SettingsRequested?.Invoke(this, EventArgs.Empty);
             _popup.QuitRequested     += (_, _) => QuitRequested?.Invoke(this, EventArgs.Empty);
+            _popup.UpdateRequested   += (_, _) => UpdateRequested?.Invoke(this, EventArgs.Empty);
             _popup.Show();
             _popup.Activate();
         });

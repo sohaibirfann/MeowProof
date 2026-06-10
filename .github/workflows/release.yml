@@ -1,0 +1,28 @@
+name: Release
+
+on:
+  push:
+    tags:
+      - 'v*'
+
+permissions:
+  contents: write
+
+jobs:
+  release:
+    runs-on: windows-latest
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: '8.0.x'
+
+      - name: Publish
+        run: dotnet publish -c Release
+
+      - name: Create GitHub Release
+        run: gh release create "${{ github.ref_name }}" --title "MeowProof ${{ github.ref_name }}" --generate-notes "bin/Release/net8.0-windows/win-x64/publish/MeowProof.exe"
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}

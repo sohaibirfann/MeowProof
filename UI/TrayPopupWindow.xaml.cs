@@ -16,6 +16,7 @@ public partial class TrayPopupWindow : Window
     public event EventHandler? OpenRequested;
     public event EventHandler? SettingsRequested;
     public event EventHandler? QuitRequested;
+    public event EventHandler? UpdateRequested;
 
     public TrayPopupWindow(LockService lockService, System.Drawing.Point cursorPos)
     {
@@ -27,6 +28,12 @@ public partial class TrayPopupWindow : Window
         ToggleLogin.IsChecked   = StartupService.IsEnabled;
         ToggleStealth.IsChecked = AppSettings.Current.PreferStealthLock;
         _loading = false;
+
+        if (UpdateService.IsUpdateAvailable)
+            UpdateSection.Visibility = Visibility.Visible;
+
+        UpdateService.UpdateFound += (_, _) =>
+            Dispatcher.BeginInvoke(() => UpdateSection.Visibility = Visibility.Visible);
 
         UpdateState();
         _lock.StateChanged += (_, _) => Dispatcher.BeginInvoke(UpdateState);
@@ -110,6 +117,14 @@ public partial class TrayPopupWindow : Window
     {
         CloseOnce();
         SettingsRequested?.Invoke(this, EventArgs.Empty);
+    }
+
+    private void Update_Click(object sender, RoutedEventArgs e)
+    {
+        UpdateBtnText.Text = "Downloading…";
+        UpdateSection.IsEnabled = false;
+        CloseOnce();
+        UpdateRequested?.Invoke(this, EventArgs.Empty);
     }
 
     private void Quit_Click(object sender, RoutedEventArgs e)
