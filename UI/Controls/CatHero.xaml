@@ -16,25 +16,25 @@
                   StrokeStartLineCap="Round" StrokeEndLineCap="Round" Fill="{x:Null}"
                   Data="M104,92 c15,1 14,-18 1,-17" />
             <!-- tucked-paw split -->
-            <Path Stroke="{StaticResource Bg}" StrokeThickness="3.5" StrokeStartLineCap="Round"
+            <Path Stroke="{Binding LineFill, ElementName=Root}" StrokeThickness="3.5" StrokeStartLineCap="Round"
                   Opacity="0.22" Data="M58,100 V82" />
             <!-- calm face: two eyes + nose -->
-            <Path Stroke="{StaticResource Bg}" StrokeThickness="2.6" StrokeStartLineCap="Round" StrokeEndLineCap="Round"
+            <Path Stroke="{Binding LineFill, ElementName=Root}" StrokeThickness="2.6" StrokeStartLineCap="Round" StrokeEndLineCap="Round"
                   Fill="{x:Null}" Data="M40,74 q6,5 12,0" />
-            <Path Stroke="{StaticResource Bg}" StrokeThickness="2.6" StrokeStartLineCap="Round" StrokeEndLineCap="Round"
+            <Path Stroke="{Binding LineFill, ElementName=Root}" StrokeThickness="2.6" StrokeStartLineCap="Round" StrokeEndLineCap="Round"
                   Fill="{x:Null}" Data="M64,74 q6,5 12,0" />
-            <Path Fill="{StaticResource Bg}" Data="M58,79 l-4,4 h8 Z" />
+            <Path Fill="{Binding LineFill, ElementName=Root}" Data="M58,79 l-4,4 h8 Z" />
             <!-- lock badge (lower-right) -->
             <Canvas Visibility="{Binding BadgeVisibility, ElementName=Root}">
                 <!-- circle cx96 cy96 r15 -->
                 <Ellipse Canvas.Left="81" Canvas.Top="81" Width="30" Height="30"
                          Fill="{Binding BadgeFill, ElementName=Root}"
-                         Stroke="{StaticResource Bg}" StrokeThickness="3.5" />
+                         Stroke="{Binding LineFill, ElementName=Root}" StrokeThickness="3.5" />
                 <!-- padlock body around (96,97.5) -->
                 <Rectangle Canvas.Left="89.5" Canvas.Top="92.5" Width="13" Height="10" RadiusX="2.4" RadiusY="2.4"
-                           Fill="{StaticResource Bg}" />
+                           Fill="{Binding LineFill, ElementName=Root}" />
                 <!-- shackle -->
-                <Path Stroke="{StaticResource Bg}" StrokeThickness="2.4" StrokeStartLineCap="Round" StrokeEndLineCap="Round"
+                <Path Stroke="{Binding LineFill, ElementName=Root}" StrokeThickness="2.4" StrokeStartLineCap="Round" StrokeEndLineCap="Round"
                       Fill="{x:Null}" Data="M92.4,92.5 V89 A3.6,3.6 0 0 1 99.6,89 V92.5" />
             </Canvas>
         </Canvas>

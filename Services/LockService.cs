@@ -35,6 +35,7 @@ public sealed class LockService : IDisposable
         if (State == LockState.Locked) return;
         State = LockState.Locked;
         _hook.Install();
+        SleepPreventer.Prevent();
         OnChanged();
     }
 
@@ -43,6 +44,7 @@ public sealed class LockService : IDisposable
         if (State == LockState.StealthLocked) return;
         State = LockState.StealthLocked;
         _hook.Install();
+        SleepPreventer.Prevent();
         OnChanged();
     }
 
@@ -51,6 +53,7 @@ public sealed class LockService : IDisposable
         if (State == LockState.Unlocked) return;
         State = LockState.Unlocked;
         _hook.Uninstall();
+        SleepPreventer.Allow();
         OnChanged();
     }
 

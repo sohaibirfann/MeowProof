@@ -77,6 +77,7 @@ public sealed class TrayService : IDisposable
     public void Start()
     {
         _notifyIcon.Visible = true;
+        _startupItem.Checked = StartupService.IsEnabled;
         UpdateForState();
     }
 
@@ -88,10 +89,8 @@ public sealed class TrayService : IDisposable
         else _lock.StealthLock();
     }
 
-    private void OnStartupToggled(object? sender, EventArgs e)
-    {
-        // Registry wiring arrives in build step 9.
-    }
+    private void OnStartupToggled(object? sender, EventArgs e) =>
+        StartupService.Apply(_startupItem.Checked);
 
     private void UpdateForState()
     {

@@ -15,7 +15,7 @@
 
             <!-- Cat loaf in locked state -->
             <ctl:CatHero x:Name="OverlayHero" Width="130" Height="130"
-                         Locked="True" Fill="White" BadgeFill="#CC7C57" />
+                         Locked="True" Fill="#CC7C57" BadgeFill="#B0633F" LineFill="White" />
 
             <!-- Title -->
             <TextBlock Text="Keyboard Locked"

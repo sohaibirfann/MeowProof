@@ -97,8 +97,5 @@ public partial class MainWindow : Window
         else _lock.StealthLock();
     }
 
-    private void Settings_Click(object sender, RoutedEventArgs e)
-    {
-        System.Windows.MessageBox.Show("Settings coming in step 8.", "MeowProof");
-    }
+    private void Settings_Click(object sender, RoutedEventArgs e) => new SettingsWindow().Show();
 }

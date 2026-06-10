@@ -83,6 +83,37 @@
         </Setter>
     </Style>
 
+    <!-- ===== iOS-style toggle switch ===== -->
+    <Style x:Key="ToggleSwitch" TargetType="ToggleButton">
+        <Setter Property="Width" Value="44" />
+        <Setter Property="Height" Value="24" />
+        <Setter Property="Cursor" Value="Hand" />
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="ToggleButton">
+                    <Border x:Name="Track" Width="44" Height="24" CornerRadius="12"
+                            Background="{StaticResource Surface3}" VerticalAlignment="Center">
+                        <Canvas>
+                            <Ellipse x:Name="Knob" Canvas.Left="3" Canvas.Top="3"
+                                     Width="18" Height="18" Fill="White">
+                                <Ellipse.Effect>
+                                    <DropShadowEffect Color="Black" Opacity="0.12"
+                                                      BlurRadius="4" ShadowDepth="1" Direction="270" />
+                                </Ellipse.Effect>
+                            </Ellipse>
+                        </Canvas>
+                    </Border>
+                    <ControlTemplate.Triggers>
+                        <Trigger Property="IsChecked" Value="True">
+                            <Setter TargetName="Track" Property="Background" Value="{StaticResource Accent}" />
+                            <Setter TargetName="Knob" Property="Canvas.Left" Value="23" />
+                        </Trigger>
+                    </ControlTemplate.Triggers>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+
     <!-- ===== Secondary button (icon + label) ===== -->
     <Style x:Key="SecondaryButton" TargetType="Button">
         <Setter Property="Height" Value="40" />

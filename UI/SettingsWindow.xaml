@@ -1,0 +1,121 @@
+<Window x:Class="MeowProof.UI.SettingsWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        Title="Settings" Width="380" SizeToContent="Height" MaxHeight="600"
+        WindowStyle="None" AllowsTransparency="True" Background="Transparent"
+        ResizeMode="NoResize" WindowStartupLocation="CenterScreen"
+        FontFamily="/Assets/Fonts/#Manrope" Foreground="{StaticResource Text}"
+        TextOptions.TextFormattingMode="Ideal" UseLayoutRounding="True">
+
+    <Border Background="{StaticResource Bg}" BorderBrush="{StaticResource Border}"
+            BorderThickness="1" CornerRadius="15">
+        <Grid>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="*" />
+            </Grid.RowDefinitions>
+
+            <!-- Title bar -->
+            <Border Grid.Row="0" Height="46" BorderBrush="{StaticResource BorderSoft}"
+                    BorderThickness="0,0,0,1" MouseLeftButtonDown="TitleBar_MouseDown">
+                <Grid Margin="14,0,10,0">
+                    <TextBlock Text="Settings" VerticalAlignment="Center"
+                               FontSize="13.5" FontWeight="Bold" Foreground="{StaticResource Text}" />
+                    <Button Style="{StaticResource WinCloseButton}" HorizontalAlignment="Right"
+                            Click="Close_Click" ToolTip="Close">
+                        <Path Stroke="{Binding Foreground, RelativeSource={RelativeSource AncestorType=Button}}"
+                              StrokeThickness="1.8" Data="M6,6 L18,18 M18,6 L6,18"
+                              Width="14" Height="14" Stretch="Uniform" />
+                    </Button>
+                </Grid>
+            </Border>
+
+            <!-- Content -->
+            <ScrollViewer Grid.Row="1" VerticalScrollBarVisibility="Auto">
+                <StackPanel Margin="16,14,16,20">
+
+                    <!-- ── General ── -->
+                    <TextBlock Text="GENERAL" FontSize="11" FontWeight="Bold"
+                               Foreground="{StaticResource TextFaint}" Margin="4,0,0,8"
+                               />
+                    <Border Background="{StaticResource Surface}" BorderBrush="{StaticResource BorderSoft}"
+                            BorderThickness="1" CornerRadius="13" Margin="0,0,0,20">
+                        <StackPanel>
+                            <Grid x:Name="RowStartup" Margin="16,14,16,14">
+                                <StackPanel>
+                                    <TextBlock Text="Launch at Startup" FontSize="13.5" FontWeight="SemiBold" />
+                                </StackPanel>
+                                <ToggleButton x:Name="ToggleStartup" Style="{StaticResource ToggleSwitch}"
+                                              HorizontalAlignment="Right" Checked="ToggleStartup_Changed" Unchecked="ToggleStartup_Changed" />
+                            </Grid>
+                            <Border BorderBrush="{StaticResource BorderSoft}" BorderThickness="0,1,0,0" Margin="16,0" />
+
+                            <Grid Margin="16,14,16,14">
+                                <StackPanel>
+                                    <TextBlock Text="Prevent Screen Sleep" FontSize="13.5" FontWeight="SemiBold" />
+                                    <TextBlock Text="Keep display awake while locked" FontSize="11.5"
+                                               Foreground="{StaticResource TextFaint}" Margin="0,2,0,0" />
+                                </StackPanel>
+                                <ToggleButton x:Name="ToggleSleep" Style="{StaticResource ToggleSwitch}"
+                                              HorizontalAlignment="Right" Checked="ToggleSleep_Changed" Unchecked="ToggleSleep_Changed" />
+                            </Grid>
+                            <Border BorderBrush="{StaticResource BorderSoft}" BorderThickness="0,1,0,0" Margin="16,0" />
+
+                            <Grid Margin="16,14,16,14">
+                                <StackPanel>
+                                    <TextBlock Text="Hide from Taskbar" FontSize="13.5" FontWeight="SemiBold" />
+                                    <TextBlock Text="Takes effect on next launch" FontSize="11.5"
+                                               Foreground="{StaticResource TextFaint}" Margin="0,2,0,0" />
+                                </StackPanel>
+                                <ToggleButton x:Name="ToggleTaskbar" Style="{StaticResource ToggleSwitch}"
+                                              HorizontalAlignment="Right" Checked="ToggleTaskbar_Changed" Unchecked="ToggleTaskbar_Changed" />
+                            </Grid>
+                        </StackPanel>
+                    </Border>
+
+                    <!-- ── Sound ── -->
+                    <TextBlock Text="SOUND" FontSize="11" FontWeight="Bold"
+                               Foreground="{StaticResource TextFaint}" Margin="4,0,0,8" />
+                    <Border Background="{StaticResource Surface}" BorderBrush="{StaticResource BorderSoft}"
+                            BorderThickness="1" CornerRadius="13" Margin="0,0,0,20">
+                        <StackPanel>
+                            <Grid Margin="16,14,16,14">
+                                <StackPanel>
+                                    <TextBlock Text="Sound on Blocked Key" FontSize="13.5" FontWeight="SemiBold" />
+                                    <TextBlock Text="Play a sound when a key is blocked" FontSize="11.5"
+                                               Foreground="{StaticResource TextFaint}" Margin="0,2,0,0" />
+                                </StackPanel>
+                                <ToggleButton x:Name="ToggleBlockedSound" Style="{StaticResource ToggleSwitch}"
+                                              HorizontalAlignment="Right" Checked="ToggleBlockedSound_Changed" Unchecked="ToggleBlockedSound_Changed" />
+                            </Grid>
+                            <Border BorderBrush="{StaticResource BorderSoft}" BorderThickness="0,1,0,0" Margin="16,0" />
+
+                            <Grid Margin="16,14,16,14">
+                                <TextBlock Text="Sound on Lock" FontSize="13.5" FontWeight="SemiBold" VerticalAlignment="Center" />
+                                <ToggleButton x:Name="ToggleLockSound" Style="{StaticResource ToggleSwitch}"
+                                              HorizontalAlignment="Right" Checked="ToggleLockSound_Changed" Unchecked="ToggleLockSound_Changed" />
+                            </Grid>
+                        </StackPanel>
+                    </Border>
+
+                    <!-- ── Cat Detection ── -->
+                    <TextBlock Text="CAT DETECTION" FontSize="11" FontWeight="Bold"
+                               Foreground="{StaticResource TextFaint}" Margin="4,0,0,8" />
+                    <Border Background="{StaticResource Surface}" BorderBrush="{StaticResource BorderSoft}"
+                            BorderThickness="1" CornerRadius="13">
+                        <Grid Margin="16,14,16,14">
+                            <StackPanel>
+                                <TextBlock Text="Smart Cat Detection" FontSize="13.5" FontWeight="SemiBold" />
+                                <TextBlock Text="Auto-lock when chaos typing is detected" FontSize="11.5"
+                                           Foreground="{StaticResource TextFaint}" Margin="0,2,0,0" />
+                            </StackPanel>
+                            <ToggleButton x:Name="ToggleCatDetection" Style="{StaticResource ToggleSwitch}"
+                                          HorizontalAlignment="Right" Checked="ToggleCatDetection_Changed" Unchecked="ToggleCatDetection_Changed" />
+                        </Grid>
+                    </Border>
+
+                </StackPanel>
+            </ScrollViewer>
+        </Grid>
+    </Border>
+</Window>

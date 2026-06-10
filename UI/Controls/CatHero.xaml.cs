@@ -31,6 +31,16 @@ public partial class CatHero : UserControl
         set => SetValue(BadgeFillProperty, value);
     }
 
+    public static readonly DependencyProperty LineFillProperty = DependencyProperty.Register(
+        nameof(LineFill), typeof(Brush), typeof(CatHero),
+        new PropertyMetadata(new SolidColorBrush(Color.FromRgb(0xFB, 0xF7, 0xF1)))); // Bg default
+
+    public Brush LineFill
+    {
+        get => (Brush)GetValue(LineFillProperty);
+        set => SetValue(LineFillProperty, value);
+    }
+
     public static readonly DependencyProperty LockedProperty = DependencyProperty.Register(
         nameof(Locked), typeof(bool), typeof(CatHero),
         new PropertyMetadata(false, OnLockedChanged));

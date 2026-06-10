@@ -40,6 +40,13 @@ internal static class Win32
     public const int VK_RSHIFT   = 0xA1;
     public const int VK_L        = 0x4C;
 
+    // Sleep prevention
+    [DllImport("kernel32.dll")]
+    public static extern uint SetThreadExecutionState(uint esFlags);
+
+    public const uint ES_CONTINUOUS       = 0x80000000;
+    public const uint ES_DISPLAY_REQUIRED = 0x00000002;
+
     // Acrylic / glassmorphism overlay
     [DllImport("user32.dll")]
     public static extern int SetWindowCompositionAttribute(IntPtr hwnd, ref WindowCompositionAttributeData data);
