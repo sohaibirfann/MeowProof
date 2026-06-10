@@ -1,0 +1,784 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>MeowProof — Keyboard Lock for Cat Owners</title>
+  <link rel="icon" href="https://raw.githubusercontent.com/sohaibirfann/MeowProof/main/Assets/meowproof.ico" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link href="https://fonts.googleapis.com/css2?family=Lora:ital,wght@0,400;0,600;0,700;1,400;1,600&family=DM+Sans:opsz,wght@9..40,300;9..40,400;9..40,500;9..40,600&display=swap" rel="stylesheet" />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --paper:       oklch(97.5% 0.011 68);
+      --paper-warm:  oklch(94%   0.018 68);
+      --paper-card:  oklch(99.5% 0.006 68);
+      --ink:         oklch(17%   0.025 58);
+      --ink-mid:     oklch(38%   0.02  62);
+      --ink-muted:   oklch(52%   0.018 62);
+      --ink-faint:   oklch(70%   0.013 65);
+      --terra:       oklch(54%   0.135 35);
+      --terra-dark:  oklch(46%   0.135 35);
+      --terra-light: oklch(68%   0.1   35);
+      --terra-pale:  oklch(95%   0.038 40);
+      --border:      oklch(89%   0.018 65);
+      --border-dark: oklch(82%   0.02  65);
+      --r:           12px;
+    }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      font-family: 'DM Sans', system-ui, sans-serif;
+      background: var(--paper);
+      color: var(--ink);
+      line-height: 1.6;
+      font-size: 16px;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    /* ── NAV ─────────────────────────────────────────── */
+    nav {
+      position: sticky; top: 0; z-index: 200;
+      background: oklch(97.5% 0.011 68 / 0.88);
+      backdrop-filter: blur(14px);
+      -webkit-backdrop-filter: blur(14px);
+      border-bottom: 1px solid var(--border);
+    }
+    .nav-inner {
+      display: flex; align-items: center; gap: 1.5rem;
+      height: 58px;
+      padding: 0 max(1.5rem, calc((100% - 1120px) / 2));
+    }
+    .nav-logo {
+      display: flex; align-items: center; gap: 0.45rem;
+      font-family: 'Lora', serif; font-weight: 700; font-size: 1.05rem;
+      color: var(--ink); text-decoration: none; flex-shrink: 0;
+    }
+    .nav-logo img { border-radius: 4px; }
+    .nav-links {
+      display: flex; align-items: center; gap: 0.25rem;
+      margin-left: auto; list-style: none;
+    }
+    .nav-links a {
+      font-size: 0.875rem; font-weight: 500;
+      color: var(--ink-muted); text-decoration: none;
+      padding: 0.35rem 0.75rem; border-radius: 6px;
+      transition: color 0.15s, background 0.15s;
+    }
+    .nav-links a:hover { color: var(--ink); background: var(--paper-warm); }
+    .nav-cta {
+      background: var(--ink) !important;
+      color: var(--paper) !important;
+      padding: 0.4rem 1rem !important;
+      border-radius: 7px !important;
+      font-weight: 600 !important;
+      transition: background 0.2s !important;
+    }
+    .nav-cta:hover { background: var(--terra) !important; }
+    @media (max-width: 640px) { .nav-links .hide-mobile { display: none; } }
+
+    /* ── HERO ─────────────────────────────────────────── */
+    .hero {
+      padding: 5rem max(1.5rem, calc((100% - 1120px) / 2)) 0;
+      text-align: center;
+      background:
+        radial-gradient(ellipse 80% 50% at 50% 0%, oklch(94% 0.03 40 / 0.35) 0%, transparent 70%),
+        var(--paper);
+      overflow: hidden;
+    }
+
+    @keyframes fadeUp {
+      from { opacity: 0; transform: translateY(18px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+
+    .hero h1 {
+      font-family: 'Lora', serif;
+      font-size: clamp(2.6rem, 5.5vw, 4.2rem);
+      font-weight: 700; line-height: 1.12;
+      letter-spacing: -0.025em; margin-bottom: 1.25rem;
+      animation: fadeUp 0.55s 0s ease both;
+    }
+    .hero h1 em { font-style: italic; color: var(--terra); }
+    .hero-sub {
+      font-size: clamp(1rem, 1.8vw, 1.15rem);
+      color: var(--ink-muted); font-weight: 300;
+      max-width: 560px; margin: 0 auto 2.25rem;
+      line-height: 1.7;
+      animation: fadeUp 0.55s 0.1s ease both;
+    }
+    .hero-sub code {
+      font-family: 'Courier New', monospace; font-size: 0.9em;
+      background: var(--paper-warm); color: var(--ink-mid);
+      padding: 0.1em 0.4em; border-radius: 4px;
+      border: 1px solid var(--border);
+    }
+    .hero-ctas {
+      display: flex; align-items: center; justify-content: center;
+      gap: 0.875rem; flex-wrap: wrap; margin-bottom: 3.75rem;
+      animation: fadeUp 0.55s 0.2s ease both;
+    }
+    .btn-primary {
+      display: inline-flex; align-items: center; gap: 0.5rem;
+      background: var(--terra); color: #fff;
+      font-family: 'DM Sans', sans-serif; font-weight: 600; font-size: 0.95rem;
+      padding: 0.75rem 1.75rem; border-radius: 8px; text-decoration: none;
+      box-shadow: 0 2px 10px oklch(54% 0.135 35 / 0.28);
+      transition: background 0.2s, transform 0.2s, box-shadow 0.2s;
+    }
+    .btn-primary:hover { background: var(--terra-dark); transform: translateY(-1px); box-shadow: 0 4px 16px oklch(54% 0.135 35 / 0.35); }
+    .btn-ghost {
+      display: inline-flex; align-items: center; gap: 0.5rem;
+      background: transparent; color: var(--ink-muted);
+      font-family: 'DM Sans', sans-serif; font-weight: 500; font-size: 0.95rem;
+      padding: 0.75rem 1.4rem; border-radius: 8px;
+      border: 1.5px solid var(--border-dark); text-decoration: none;
+      transition: border-color 0.2s, color 0.2s, background 0.2s;
+    }
+    .btn-ghost:hover { border-color: var(--ink-faint); color: var(--ink); background: var(--paper-warm); }
+
+    .hero-screen-wrap {
+      max-width: 720px; margin: 0 auto; position: relative;
+      animation: fadeUp 0.65s 0.3s ease both;
+    }
+    .hero-screen-wrap::before {
+      content: '';
+      position: absolute; inset: -1px; border-radius: 14px 14px 0 0;
+      background: linear-gradient(to bottom, var(--border) 0%, transparent 60%);
+      pointer-events: none; z-index: 1;
+    }
+    .window-chrome {
+      background: oklch(21% 0.02 58);
+      padding: 0.6rem 1rem;
+      display: flex; align-items: center; gap: 0.45rem;
+      border-radius: 13px 13px 0 0;
+    }
+    .dot { width: 11px; height: 11px; border-radius: 50%; }
+    .hero-screen-wrap img {
+      width: 100%; display: block;
+      border: 1px solid var(--border); border-top: none;
+    }
+
+    /* ── STATS BAR ───────────────────────────────────── */
+    .stats-bar {
+      background: var(--ink);
+      padding: 0 max(1.5rem, calc((100% - 1120px) / 2));
+    }
+    .stats-inner { display: flex; align-items: stretch; flex-wrap: wrap; justify-content: center; }
+    .stat-item {
+      display: flex; flex-direction: column;
+      padding: 1.2rem 2rem;
+      border-right: 1px solid oklch(100% 0 0 / 0.1); gap: 0.15rem;
+    }
+    .stat-item:last-child { border-right: none; }
+    .stat-val { font-family: 'Lora', serif; font-size: 1.05rem; font-weight: 600; color: var(--terra-light); }
+    .stat-desc { font-size: 0.8rem; font-weight: 400; color: oklch(72% 0.015 65); white-space: nowrap; }
+    @media (max-width: 640px) {
+      .stat-item { border-right: none; border-bottom: 1px solid oklch(100% 0 0 / 0.1); }
+      .stat-item:last-child { border-bottom: none; }
+    }
+
+    /* ── SHARED SECTION ──────────────────────────────── */
+    .section { padding: 5rem max(1.5rem, calc((100% - 1120px) / 2)); }
+    .label {
+      display: block; font-size: 0.72rem; font-weight: 700;
+      letter-spacing: 0.1em; text-transform: uppercase;
+      color: var(--terra); margin-bottom: 0.65rem;
+    }
+    .section-h {
+      font-family: 'Lora', serif;
+      font-size: clamp(1.75rem, 3vw, 2.4rem);
+      font-weight: 700; line-height: 1.2; letter-spacing: -0.015em; margin-bottom: 0.75rem;
+    }
+    .section-sub { font-size: 0.975rem; font-weight: 300; color: var(--ink-muted); line-height: 1.7; max-width: 500px; }
+
+    /* ── FEATURES ─────────────────────────────────────── */
+    .features-grid {
+      display: grid; grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+      gap: 1.125rem; margin-top: 3rem;
+    }
+    .feat-card {
+      background: var(--paper-card); border: 1px solid var(--border);
+      border-radius: var(--r); padding: 1.75rem;
+      transition: border-color 0.2s, box-shadow 0.2s, transform 0.2s, opacity 0.5s;
+    }
+    .feat-card:hover { border-color: var(--terra-light); box-shadow: 0 4px 20px oklch(0% 0 0 / 0.07); transform: translateY(-2px); }
+    .feat-icon {
+      width: 42px; height: 42px; border-radius: 10px;
+      background: var(--terra-pale); color: var(--terra);
+      display: flex; align-items: center; justify-content: center; margin-bottom: 1rem;
+    }
+    .feat-card h3 { font-family: 'Lora', serif; font-size: 1.05rem; font-weight: 600; margin-bottom: 0.4rem; }
+    .feat-card p { font-size: 0.875rem; font-weight: 300; color: var(--ink-muted); line-height: 1.65; }
+    .feat-card p strong { font-weight: 500; color: var(--ink-mid); }
+
+    /* ── HOW IT WORKS ────────────────────────────────── */
+    .hiw { background: var(--paper-warm); }
+    .steps { display: grid; grid-template-columns: repeat(3, 1fr); gap: 2.5rem; margin-top: 3rem; }
+    @media (max-width: 700px) { .steps { grid-template-columns: 1fr; gap: 2rem; } }
+    .step-num {
+      font-family: 'Lora', serif; font-size: 3.75rem; font-weight: 700; line-height: 1;
+      color: transparent; -webkit-text-stroke: 2px var(--terra-light); margin-bottom: 1rem;
+    }
+    .step h3 { font-family: 'Lora', serif; font-size: 1.1rem; font-weight: 600; margin-bottom: 0.5rem; }
+    .step p { font-size: 0.875rem; font-weight: 300; color: var(--ink-muted); line-height: 1.7; }
+    .step p strong { font-weight: 600; color: var(--ink-mid); }
+    .key-combo { display: inline-flex; align-items: center; gap: 0.3rem; vertical-align: middle; }
+    .key {
+      display: inline-block;
+      background: var(--paper-card);
+      border: 1px solid var(--border-dark);
+      border-bottom: 2.5px solid var(--border-dark);
+      padding: 0.18em 0.55em;
+      border-radius: 5px;
+      font-family: 'DM Sans', sans-serif;
+      font-size: 0.78rem; font-weight: 600;
+      color: var(--ink-mid);
+      box-shadow: 0 1px 3px oklch(0% 0 0 / 0.1);
+      letter-spacing: 0.01em;
+      white-space: nowrap;
+    }
+    .key-sep { font-size: 0.7rem; color: var(--ink-faint); font-weight: 400; }
+
+    /* ── CAT DETECTION ───────────────────────────────── */
+    .det-intro {
+      text-align: center; max-width: 580px; margin: 0 auto 3rem;
+    }
+    .det-intro .section-sub { max-width: 100%; }
+    .det-signals {
+      display: grid; grid-template-columns: repeat(4, 1fr); gap: 1.125rem;
+    }
+    @media (max-width: 800px) { .det-signals { grid-template-columns: repeat(2, 1fr); } }
+    @media (max-width: 440px)  { .det-signals { grid-template-columns: 1fr; } }
+    .det-sig {
+      background: var(--paper-card); border: 1px solid var(--border);
+      border-radius: var(--r); padding: 1.5rem; text-align: center;
+      transition: border-color 0.2s, box-shadow 0.2s, transform 0.2s, opacity 0.5s;
+    }
+    .det-sig:hover { border-color: var(--terra-light); box-shadow: 0 4px 20px oklch(0% 0 0 / 0.07); transform: translateY(-2px); }
+    .det-sig-icon {
+      width: 48px; height: 48px; border-radius: 12px;
+      background: var(--terra-pale); color: var(--terra);
+      display: flex; align-items: center; justify-content: center;
+      margin: 0 auto 1rem;
+    }
+    .det-sig h4 { font-family: 'Lora', serif; font-size: 0.95rem; font-weight: 600; margin-bottom: 0.4rem; }
+    .det-sig p { font-size: 0.82rem; font-weight: 300; color: var(--ink-muted); line-height: 1.55; }
+    .det-note { text-align: center; margin-top: 2.25rem; font-size: 0.82rem; color: var(--ink-faint); font-style: italic; }
+
+    /* ── SCREENSHOTS ─────────────────────────────────── */
+    .shots { background: var(--ink); }
+    .shots .label { color: var(--terra-light); }
+    .shots .section-h { color: var(--paper); }
+    .shots .section-sub { color: oklch(65% 0.015 65); }
+    .shots-grid {
+      display: grid;
+      grid-template-columns: 1.6fr 1fr;
+      grid-template-rows: auto auto;
+      gap: 1.125rem;
+      margin-top: 3rem;
+      align-items: start;
+    }
+    .shots-grid .shot-card:first-child { grid-row: span 2; }
+    @media (max-width: 700px) { .shots-grid { grid-template-columns: 1fr; } }
+    @media (max-width: 700px) { .shots-grid .shot-card:first-child { grid-row: span 1; } }
+    .shot-card {
+      border-radius: var(--r); overflow: hidden;
+      border: 1px solid oklch(100% 0 0 / 0.09);
+      transition: border-color 0.2s, transform 0.2s, opacity 0.5s;
+    }
+    .shot-card:hover { border-color: oklch(100% 0 0 / 0.22); transform: translateY(-2px); }
+    .shot-card { position: relative; }
+    .shot-card img { width: 100%; display: block; }
+    .shot-expand {
+      position: absolute; top: 0.6rem; right: 0.6rem;
+      width: 32px; height: 32px; border-radius: 8px;
+      background: oklch(0% 0 0 / 0.45); backdrop-filter: blur(6px);
+      border: 1px solid oklch(100% 0 0 / 0.15);
+      color: #fff; cursor: pointer;
+      display: flex; align-items: center; justify-content: center;
+      opacity: 0; transition: opacity 0.2s, background 0.2s;
+      z-index: 2;
+    }
+    .shot-card:hover .shot-expand { opacity: 1; }
+    .shot-expand:hover { background: oklch(0% 0 0 / 0.65); }
+
+    /* lightbox */
+    .lightbox {
+      position: fixed; inset: 0; z-index: 1000;
+      background: oklch(0% 0 0 / 0.88);
+      display: flex; align-items: center; justify-content: center;
+      padding: 2rem;
+      opacity: 0; pointer-events: none;
+      transition: opacity 0.25s ease;
+    }
+    .lightbox.open { opacity: 1; pointer-events: all; }
+    .lightbox img {
+      max-width: 100%; max-height: 90vh;
+      border-radius: 10px;
+      box-shadow: 0 24px 80px oklch(0% 0 0 / 0.5);
+      transform: scale(0.94);
+      transition: transform 0.25s ease;
+    }
+    .lightbox.open img { transform: scale(1); }
+    .lightbox-close {
+      position: absolute; top: 1.25rem; right: 1.25rem;
+      width: 40px; height: 40px; border-radius: 50%;
+      background: oklch(100% 0 0 / 0.12); border: 1px solid oklch(100% 0 0 / 0.2);
+      color: #fff; cursor: pointer; font-size: 1.2rem;
+      display: flex; align-items: center; justify-content: center;
+      transition: background 0.15s;
+    }
+    .lightbox-close:hover { background: oklch(100% 0 0 / 0.22); }
+    .shot-label { padding: 0.7rem 1rem; background: oklch(24% 0.02 58); font-size: 0.8rem; font-weight: 400; color: oklch(65% 0.015 65); }
+
+    /* ── DOWNLOAD ────────────────────────────────────── */
+    .dl-section { text-align: center; }
+    .dl-card {
+      background: var(--paper-card); border: 1px solid var(--border);
+      border-radius: 20px; padding: 3rem 2.5rem;
+      max-width: 580px; margin: 0 auto;
+      box-shadow: 0 4px 24px oklch(0% 0 0 / 0.06);
+    }
+    .dl-card .section-h { font-size: 2rem; margin-bottom: 0.65rem; }
+    .dl-desc { font-size: 0.95rem; font-weight: 300; color: var(--ink-muted); line-height: 1.65; margin-bottom: 2rem; }
+    .install-steps { list-style: none; display: flex; flex-direction: column; gap: 0.75rem; text-align: left; margin-bottom: 2rem; }
+    .install-step { display: flex; align-items: flex-start; gap: 0.75rem; font-size: 0.9rem; font-weight: 300; color: var(--ink-muted); }
+    .install-n {
+      flex-shrink: 0; width: 22px; height: 22px; border-radius: 50%;
+      background: var(--terra-pale); color: var(--terra);
+      font-size: 0.7rem; font-weight: 700;
+      display: flex; align-items: center; justify-content: center; margin-top: 0.15rem;
+    }
+    .install-step strong { font-weight: 500; color: var(--ink-mid); }
+    .dl-note { margin-top: 1.5rem; font-size: 0.8rem; color: var(--ink-faint); line-height: 1.6; }
+    .dl-note a { color: var(--terra); text-decoration: none; }
+    .dl-note a:hover { text-decoration: underline; }
+
+    /* ── FOOTER ──────────────────────────────────────── */
+    footer {
+      background: var(--paper-warm); border-top: 1px solid var(--border);
+      padding: 2rem max(1.5rem, calc((100% - 1120px) / 2));
+    }
+    .footer-inner { display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 1rem; }
+    .footer-logo {
+      display: flex; align-items: center; gap: 0.4rem;
+      font-family: 'Lora', serif; font-weight: 700; font-size: 0.95rem;
+      color: var(--ink); text-decoration: none;
+    }
+    .footer-logo img { border-radius: 3px; }
+    .footer-links { display: flex; gap: 1.5rem; list-style: none; flex-wrap: wrap; }
+    .footer-links a { font-size: 0.85rem; color: var(--ink-muted); text-decoration: none; transition: color 0.15s; }
+    .footer-links a:hover { color: var(--ink); }
+    .footer-copy { font-size: 0.8rem; color: var(--ink-faint); font-style: italic; }
+
+    /* ── SCROLL ANIMATIONS ───────────────────────────── */
+    /* section intros */
+    .animate-in {
+      transition: opacity 0.65s ease, transform 0.65s ease;
+    }
+    /* cards — initial hidden state set by JS, not CSS, so noscript still shows them */
+    .feat-card, .step, .shot-card, .det-sig, .dl-card {
+      transition: border-color 0.2s, box-shadow 0.2s, transform 0.2s, opacity 0.5s;
+    }
+    /* active visible state */
+    .animate-in.visible,
+    .feat-card.visible, .step.visible, .shot-card.visible, .det-sig.visible, .dl-card.visible {
+      opacity: 1 !important;
+      transform: translateY(0) !important;
+    }
+  </style>
+</head>
+<body>
+
+<!-- ═══ NAV ═══════════════════════════════════════════ -->
+<nav>
+  <div class="nav-inner">
+    <a href="#" class="nav-logo">
+      <img src="https://raw.githubusercontent.com/sohaibirfann/MeowProof/main/Assets/meowproof.ico" width="22" height="22" alt="MeowProof icon" />
+      MeowProof
+    </a>
+    <ul class="nav-links">
+      <li class="hide-mobile"><a href="#features">Features</a></li>
+      <li class="hide-mobile"><a href="#how-it-works">How it works</a></li>
+      <li class="hide-mobile"><a href="#screenshots">Screenshots</a></li>
+      <li class="hide-mobile"><a href="https://github.com/sohaibirfann/MeowProof" target="_blank" rel="noopener">GitHub</a></li>
+      <li><a href="#download" class="nav-cta">Download</a></li>
+    </ul>
+  </div>
+</nav>
+
+<!-- ═══ HERO ═══════════════════════════════════════════ -->
+<div class="hero">
+  <h1>Your cat is not<br><em>a developer.</em></h1>
+
+  <p class="hero-sub">
+    MeowProof locks your keyboard in one click — and auto-locks when it
+    detects paw-walking. No more <code>jjjjkkkkaaaaaa</code> sent to production,
+    closed documents, or misfired shortcuts.
+  </p>
+
+  <div class="hero-ctas">
+    <a href="https://github.com/sohaibirfann/MeowProof/releases" target="_blank" rel="noopener" class="btn-primary">
+      <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" aria-hidden="true"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7,10 12,15 17,10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+      Download free
+    </a>
+    <a href="https://github.com/sohaibirfann/MeowProof" target="_blank" rel="noopener" class="btn-ghost">
+      View on GitHub
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>
+    </a>
+  </div>
+
+  <div class="hero-screen-wrap">
+    <div class="window-chrome">
+      <div class="dot" style="background:#ff5f57;"></div>
+      <div class="dot" style="background:#ffbd2e;"></div>
+      <div class="dot" style="background:#28c840;"></div>
+    </div>
+    <img
+      src="https://raw.githubusercontent.com/sohaibirfann/MeowProof/main/docs/main-window.png"
+      alt="MeowProof main window"
+      loading="eager"
+    />
+  </div>
+</div>
+
+<!-- ═══ STATS BAR ════════════════════════════════════════ -->
+<div class="stats-bar">
+  <div class="stats-inner">
+    <div class="stat-item">
+      <span class="stat-val">1 click</span>
+      <span class="stat-desc">to lock your keyboard</span>
+    </div>
+    <div class="stat-item">
+      <span class="stat-val">Ctrl+Shift+L</span>
+      <span class="stat-desc">to unlock, always</span>
+    </div>
+    <div class="stat-item">
+      <span class="stat-val">Auto-detects</span>
+      <span class="stat-desc">cat typing patterns</span>
+    </div>
+    <div class="stat-item">
+      <span class="stat-val">Works silently</span>
+      <span class="stat-desc">lives in your system tray</span>
+    </div>
+    <div class="stat-item">
+      <span class="stat-val">Free forever</span>
+      <span class="stat-desc">open source on GitHub</span>
+    </div>
+  </div>
+</div>
+
+<!-- ═══ FEATURES ═══════════════════════════════════════ -->
+<section id="features" class="section">
+  <div class="animate-in">
+    <span class="label">Features</span>
+    <h2 class="section-h">Everything you need.<br>Nothing you don't.</h2>
+    <p class="section-sub">A focused utility that does one thing well — with a handful of extras for cat owners who've been burned before.</p>
+  </div>
+
+  <div class="features-grid">
+    <div class="feat-card">
+      <div class="feat-icon">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
+      </div>
+      <h3>One-click keyboard lock</h3>
+      <p>Blocks every key system-wide. Hit <strong>Lock Keyboard</strong> in the window, tray menu, or press <strong>Ctrl+Shift+L</strong> from anywhere.</p>
+    </div>
+
+    <div class="feat-card">
+      <div class="feat-icon">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><ellipse cx="12" cy="14.5" rx="5" ry="4.5"/><circle cx="5.5" cy="10.5" r="2"/><circle cx="9.5" cy="8" r="2"/><circle cx="14.5" cy="8" r="2"/><circle cx="18.5" cy="10.5" r="2"/></svg>
+      </div>
+      <h3>Smart cat detection</h3>
+      <p>Watches for paw-like typing in the background. <strong>Auto-locks</strong> the moment it spots cat chaos — no input needed from you.</p>
+    </div>
+
+    <div class="feat-card">
+      <div class="feat-icon">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><rect x="2" y="3" width="20" height="14" rx="2"/><path d="M8 21h8M12 17v4"/><circle cx="12" cy="10" r="3" stroke-dasharray="2 1.5"/></svg>
+      </div>
+      <h3>Glassmorphism overlay</h3>
+      <p>A full-screen frosted blur appears on every monitor when locked. Or use <strong>Stealth Lock</strong> for a completely silent, invisible lock.</p>
+    </div>
+
+    <div class="feat-card">
+      <div class="feat-icon">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"/><path d="M19.07 4.93a10 10 0 0 1 0 14.14"/><path d="M15.54 8.46a5 5 0 0 1 0 7.07"/></svg>
+      </div>
+      <h3>Sound feedback</h3>
+      <p>Optional sounds on lock and every blocked keystroke. Choose from <strong>7 built-in sounds</strong>, or import your own. Great for deterring persistent paws.</p>
+    </div>
+
+    <div class="feat-card">
+      <div class="feat-icon">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>
+      </div>
+      <h3>Smart sleep behavior</h3>
+      <p><strong>Auto-unlocks</strong> on sleep or session lock — so you're never locked out of your own machine. Keeps your display awake while locked, too.</p>
+    </div>
+
+    <div class="feat-card">
+      <div class="feat-icon">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><polyline points="23 6 13.5 15.5 8.5 10.5 1 18"/><polyline points="17 6 23 6 23 12"/></svg>
+      </div>
+      <h3>Launch at login</h3>
+      <p>Set it and forget it — MeowProof <strong>starts automatically with Windows</strong> and repairs itself if you ever move it to a new folder.</p>
+    </div>
+  </div>
+</section>
+
+<!-- ═══ HOW IT WORKS ═══════════════════════════════════ -->
+<section id="how-it-works" class="section hiw">
+  <div class="animate-in">
+    <span class="label">How it works</span>
+    <h2 class="section-h">Up and running in<br>thirty seconds flat.</h2>
+    <p class="section-sub">Download and you're done. No setup, no configuration, no fuss.</p>
+  </div>
+
+  <div class="steps">
+    <div class="step">
+      <div class="step-num">01</div>
+      <h3>Download &amp; launch</h3>
+      <p>Download MeowProof and double-click it — that's the whole setup. It starts in your system tray right away.</p>
+    </div>
+    <div class="step">
+      <div class="step-num">02</div>
+      <h3>Lock when needed</h3>
+      <p>Click <strong>Lock Keyboard</strong> in the window or tray, or press <span class="key-combo"><kbd class="key">Ctrl</kbd><span class="key-sep">+</span><kbd class="key">Shift</kbd><span class="key-sep">+</span><kbd class="key">L</kbd></span> from any app, any time.</p>
+    </div>
+    <div class="step">
+      <div class="step-num">03</div>
+      <h3>Unlock. Your cat cannot.</h3>
+      <p>Press <span class="key-combo"><kbd class="key">Ctrl</kbd><span class="key-sep">+</span><kbd class="key">Shift</kbd><span class="key-sep">+</span><kbd class="key">L</kbd></span> — works even while everything else is blocked. Your cat definitely can't do that.</p>
+    </div>
+  </div>
+</section>
+
+<!-- ═══ CAT DETECTION ══════════════════════════════════ -->
+<section id="detection" class="section">
+  <div class="det-intro animate-in">
+    <span class="label">Cat Detection</span>
+    <h2 class="section-h">It knows when your<br>cat is typing.</h2>
+    <p class="section-sub">
+      MeowProof quietly watches for the telltale signs in the background.
+      It never interferes with your own typing — no matter how fast you go.
+    </p>
+  </div>
+
+  <div class="det-signals">
+    <div class="det-sig">
+      <div class="det-sig-icon">
+        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><polyline points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg>
+      </div>
+      <h4>Frantic bursts</h4>
+      <p>Keys flying way faster than any human would ever type</p>
+    </div>
+
+    <div class="det-sig">
+      <div class="det-sig-icon">
+        <svg width="22" height="22" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><ellipse cx="12" cy="14.5" rx="5" ry="4.5"/><circle cx="5.5" cy="10.5" r="2"/><circle cx="9.5" cy="8" r="2"/><circle cx="14.5" cy="8" r="2"/><circle cx="18.5" cy="10.5" r="2"/></svg>
+      </div>
+      <h4>Whole-paw pressing</h4>
+      <p>Multiple keys held down all at once — like a paw resting on the keyboard</p>
+    </div>
+
+    <div class="det-sig">
+      <div class="det-sig-icon">
+        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><polyline points="16 3 21 3 21 8"/><line x1="4" y1="20" x2="21" y2="3"/><polyline points="21 16 21 21 16 21"/><line x1="15" y1="15" x2="21" y2="21"/></svg>
+      </div>
+      <h4>Total key chaos</h4>
+      <p>A wild random mix of letters, numbers, and symbols — all in one go</p>
+    </div>
+
+    <div class="det-sig">
+      <div class="det-sig-icon">
+        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+      </div>
+      <h4>Sitting on a key</h4>
+      <p>One key held down for way, way longer than any person would</p>
+    </div>
+  </div>
+
+  <p class="det-note">Resets automatically after 5 seconds of no input and never affects your own typing.</p>
+</section>
+
+<!-- ═══ SCREENSHOTS ════════════════════════════════════ -->
+<section id="screenshots" class="section shots">
+  <div class="animate-in">
+    <span class="label">Screenshots</span>
+    <h2 class="section-h">See it in action.</h2>
+    <p class="section-sub">A warm, focused UI — exactly where you need it, invisible when you don't.</p>
+  </div>
+
+  <div class="shots-grid">
+    <div class="shot-card">
+      <img src="https://raw.githubusercontent.com/sohaibirfann/MeowProof/main/docs/overlay.png" alt="Glassmorphism lock overlay" loading="lazy" />
+      <button class="shot-expand" aria-label="Expand image">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M15 3h6v6M9 21H3v-6M21 3l-7 7M3 21l7-7"/></svg>
+      </button>
+      <div class="shot-label">Lock overlay — frosted blur on every monitor</div>
+    </div>
+    <div class="shot-card">
+      <img src="https://raw.githubusercontent.com/sohaibirfann/MeowProof/main/docs/tray-popup.png" alt="System tray menu" loading="lazy" />
+      <button class="shot-expand" aria-label="Expand image">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M15 3h6v6M9 21H3v-6M21 3l-7 7M3 21l7-7"/></svg>
+      </button>
+      <div class="shot-label">Tray menu — lock, toggles, quick actions</div>
+    </div>
+    <div class="shot-card">
+      <img src="https://raw.githubusercontent.com/sohaibirfann/MeowProof/main/docs/settings.png" alt="Settings panel" loading="lazy" />
+      <button class="shot-expand" aria-label="Expand image">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M15 3h6v6M9 21H3v-6M21 3l-7 7M3 21l7-7"/></svg>
+      </button>
+      <div class="shot-label">Settings — startup, sleep, sounds, cat detection</div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══ DOWNLOAD ═══════════════════════════════════════ -->
+<section id="download" class="section dl-section">
+  <div class="dl-card">
+    <span class="label" style="text-align:center; display:block;">Download</span>
+    <h2 class="section-h">Download &amp; run in seconds.</h2>
+    <p class="dl-desc">Just download MeowProof and run it. Nothing to install, nothing to configure.</p>
+
+    <ol class="install-steps">
+      <li class="install-step">
+        <span class="install-n">1</span>
+        <span>Click <strong>Download</strong> below and save MeowProof anywhere on your PC.</span>
+      </li>
+      <li class="install-step">
+        <span class="install-n">2</span>
+        <span>Double-click it. A small icon appears in your taskbar tray — that's it.</span>
+      </li>
+      <li class="install-step">
+        <span class="install-n">3</span>
+        <span>Click <strong>Lock Keyboard</strong> whenever your cat walks over.</span>
+      </li>
+    </ol>
+
+    <a href="https://github.com/sohaibirfann/MeowProof/releases" target="_blank" rel="noopener" class="btn-primary" style="margin: 0 auto;">
+      <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" aria-hidden="true"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7,10 12,15 17,10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+      Download MeowProof
+    </a>
+
+    <p class="dl-note">
+      Free &amp; open source &nbsp;·&nbsp; Windows 10 / 11
+      &nbsp;·&nbsp; <a href="https://github.com/sohaibirfann/MeowProof" target="_blank" rel="noopener">View source on GitHub</a>
+    </p>
+  </div>
+</section>
+
+<!-- ═══ LIGHTBOX ════════════════════════════════════ -->
+<div class="lightbox" id="lightbox" role="dialog" aria-modal="true" aria-label="Image preview">
+  <button class="lightbox-close" id="lightboxClose" aria-label="Close">
+    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+  </button>
+  <img id="lightboxImg" alt="" />
+</div>
+
+<!-- ═══ FOOTER ═════════════════════════════════════════ -->
+<footer>
+  <div class="footer-inner">
+    <a href="#" class="footer-logo">
+      <img src="https://raw.githubusercontent.com/sohaibirfann/MeowProof/main/Assets/meowproof.ico" width="18" height="18" alt="MeowProof icon" />
+      MeowProof
+    </a>
+    <ul class="footer-links">
+      <li><a href="https://github.com/sohaibirfann/MeowProof" target="_blank" rel="noopener">GitHub</a></li>
+      <li><a href="https://github.com/sohaibirfann/MeowProof/releases" target="_blank" rel="noopener">Releases</a></li>
+      <li><a href="https://github.com/sohaibirfann/MeowProof/blob/main/LICENSE" target="_blank" rel="noopener">License</a></li>
+      <li><a href="https://github.com/sohaibirfann/MeowProof/issues" target="_blank" rel="noopener">Issues</a></li>
+    </ul>
+
+  </div>
+</footer>
+
+<script>
+// ── LIGHTBOX ──────────────────────────────────────────
+(function () {
+  var lb      = document.getElementById('lightbox');
+  var lbImg   = document.getElementById('lightboxImg');
+  var lbClose = document.getElementById('lightboxClose');
+
+  function open(src, alt) {
+    lbImg.src = src; lbImg.alt = alt || '';
+    lb.classList.add('open');
+    document.body.style.overflow = 'hidden';
+  }
+  function close() {
+    lb.classList.remove('open');
+    document.body.style.overflow = '';
+  }
+
+  document.querySelectorAll('.shot-expand').forEach(function (btn) {
+    btn.addEventListener('click', function (e) {
+      e.stopPropagation();
+      var img = btn.closest('.shot-card').querySelector('img');
+      open(img.src, img.alt);
+    });
+  });
+
+  lbClose.addEventListener('click', close);
+  lb.addEventListener('click', function (e) { if (e.target === lb) close(); });
+  document.addEventListener('keydown', function (e) { if (e.key === 'Escape') close(); });
+})();
+
+(function () {
+  // Only animate if reduced-motion is not preferred
+  if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+
+  // Hide animatable elements before first paint
+  var selectors = '.animate-in, .feat-card, .step, .shot-card, .det-sig, .dl-card';
+  document.querySelectorAll(selectors).forEach(function (el) {
+    el.style.opacity = '0';
+    el.style.transform = 'translateY(22px)';
+  });
+
+  function reveal(el, delay) {
+    setTimeout(function () {
+      el.style.transitionDelay = '0s';
+      el.classList.add('visible');
+      // Clean up inline styles after transition so hover works normally
+      el.addEventListener('transitionend', function handler() {
+        el.style.opacity = '';
+        el.style.transform = '';
+        el.style.transitionDelay = '';
+        el.removeEventListener('transitionend', handler);
+      });
+    }, delay || 0);
+  }
+
+  // Observer for staggered grid children
+  var gridObserver = new IntersectionObserver(function (entries, obs) {
+    entries.forEach(function (entry) {
+      if (!entry.isIntersecting) return;
+      var cards = entry.target.querySelectorAll('.feat-card, .step, .shot-card, .det-sig');
+      cards.forEach(function (card, i) { reveal(card, i * 90); });
+      obs.unobserve(entry.target);
+    });
+  }, { threshold: 0.08 });
+
+  document.querySelectorAll('.features-grid, .steps, .det-signals, .shots-grid').forEach(function (grid) {
+    gridObserver.observe(grid);
+  });
+
+  // Observer for section intros and dl-card
+  var introObserver = new IntersectionObserver(function (entries, obs) {
+    entries.forEach(function (entry) {
+      if (!entry.isIntersecting) return;
+      reveal(entry.target, 0);
+      obs.unobserve(entry.target);
+    });
+  }, { threshold: 0.15 });
+
+  document.querySelectorAll('.animate-in, .dl-card').forEach(function (el) {
+    introObserver.observe(el);
+  });
+})();
+</script>
+</body>
+</html>
