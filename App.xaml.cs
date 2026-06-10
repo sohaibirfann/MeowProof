@@ -41,6 +41,7 @@ public partial class App : System.Windows.Application
 
     protected override void OnExit(ExitEventArgs e)
     {
+        _lock?.Dispose();
         _tray?.Dispose();
         base.OnExit(e);
     }

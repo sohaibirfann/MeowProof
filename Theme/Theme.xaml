@@ -15,6 +15,8 @@
     <Color x:Key="AccentDeepColor">#B0633F</Color>
     <Color x:Key="AccentSoftColor">#F6E7DC</Color>
     <Color x:Key="AccentGlowColor">#38CC7C57</Color>
+    <Color x:Key="SageColor">#6E9E86</Color>
+    <Color x:Key="SageGlowColor">#246E9E86</Color>
     <Color x:Key="GreenColor">#6BCB77</Color>
     <Color x:Key="RedColor">#D9645C</Color>
 
@@ -31,10 +33,12 @@
     <SolidColorBrush x:Key="AccentDeep" Color="{StaticResource AccentDeepColor}" />
     <SolidColorBrush x:Key="AccentSoft" Color="{StaticResource AccentSoftColor}" />
     <SolidColorBrush x:Key="AccentGlow" Color="{StaticResource AccentGlowColor}" />
+    <SolidColorBrush x:Key="Sage" Color="{StaticResource SageColor}" />
+    <SolidColorBrush x:Key="SageGlow" Color="{StaticResource SageGlowColor}" />
     <SolidColorBrush x:Key="Green" Color="{StaticResource GreenColor}" />
     <SolidColorBrush x:Key="Red" Color="{StaticResource RedColor}" />
 
-    <FontFamily x:Key="UiFont">Segoe UI Variable Display, Segoe UI, sans-serif</FontFamily>
+    <FontFamily x:Key="UiFont">/Assets/Fonts/#Manrope</FontFamily>
 
     <!-- ===== Window chrome buttons (min / close) ===== -->
     <Style x:Key="WinButton" TargetType="Button">

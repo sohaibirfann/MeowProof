@@ -20,4 +20,12 @@
     <Using Remove="System.Drawing" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Resource Include="Assets\Fonts\Manrope-Regular.ttf" />
+    <Resource Include="Assets\Fonts\Manrope-Medium.ttf" />
+    <Resource Include="Assets\Fonts\Manrope-SemiBold.ttf" />
+    <Resource Include="Assets\Fonts\Manrope-Bold.ttf" />
+    <Resource Include="Assets\Fonts\Manrope-ExtraBold.ttf" />
+  </ItemGroup>
+
 </Project>

@@ -2,6 +2,7 @@ using System.ComponentModel;
 using System.Windows;
 using System.Windows.Input;
 using System.Windows.Media;
+using MeowProof.Core;
 using MeowProof.Services;
 
 namespace MeowProof.UI;
@@ -9,6 +10,7 @@ namespace MeowProof.UI;
 public partial class MainWindow : Window
 {
     private readonly LockService _lock;
+    private readonly GlobalHotkey _hotkey;
 
     /// <summary>When false (default), closing the window just hides it to the tray.</summary>
     public bool AllowClose { get; set; }
@@ -18,6 +20,8 @@ public partial class MainWindow : Window
         InitializeComponent();
         _lock = lockService;
         _lock.StateChanged += (_, _) => Dispatcher.Invoke(UpdateState);
+        _hotkey = new GlobalHotkey(_lock.Toggle);
+        SourceInitialized += (_, _) => _hotkey.Register(this);
         UpdateState();
     }
 
@@ -50,9 +54,9 @@ public partial class MainWindow : Window
         }
         else
         {
-            StatusPill.Background = Brush("Surface2");
-            PillDot.Fill = Brush("Green");
-            PillText.Foreground = Brush("TextDim");
+            StatusPill.Background = Brush("SageGlow");
+            PillDot.Fill = Brush("Sage");
+            PillText.Foreground = Brush("Sage");
             PillText.Text = "Ready";
 
             PrimaryActionButton.Background = Gradient("AccentGradient");
@@ -76,9 +80,11 @@ public partial class MainWindow : Window
 
     protected override void OnClosing(CancelEventArgs e)
     {
-        // The app lives in the tray; closing the window just hides it,
-        // unless the app is actually quitting.
-        if (AllowClose) return;
+        if (AllowClose)
+        {
+            _hotkey.Dispose();
+            return;
+        }
         e.Cancel = true;
         Hide();
     }
