@@ -36,10 +36,11 @@ public static class StartupService
     /// </summary>
     public static void SyncPath()
     {
+        var command = CurrentCommand;
         using var key = Registry.CurrentUser.OpenSubKey(RegPath, writable: true);
         var existing = key?.GetValue(AppName) as string;
         if (existing is null) return; // not enabled — leave it alone
-        if (!string.Equals(existing, CurrentCommand, StringComparison.OrdinalIgnoreCase))
-            key!.SetValue(AppName, CurrentCommand);
+        if (!string.Equals(existing, command, StringComparison.OrdinalIgnoreCase))
+            key!.SetValue(AppName, command);
     }
 }

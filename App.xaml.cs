@@ -1,3 +1,4 @@
+using System.IO;
 using System.Windows;
 using Microsoft.Win32;
 using MeowProof.Core;
@@ -19,10 +20,10 @@ public partial class App : System.Windows.Application
     {
         base.OnStartup(e);
 
-        // Surface unhandled UI exceptions instead of silently dying, and keep
-        // running where it's safe to.
         DispatcherUnhandledException += (_, ex) =>
         {
+            // Don't swallow process-fatal exceptions — let them crash with the logged report.
+            if (ex.Exception is OutOfMemoryException or AccessViolationException) return;
             LogCrash(ex.Exception);
             MessageBox.Show(ex.Exception.Message, "MeowProof hit a snag",
                 MessageBoxButton.OK, MessageBoxImage.Warning);
@@ -86,13 +87,11 @@ public partial class App : System.Windows.Application
     {
         try
         {
-            var path = System.IO.Path.Combine(
-                Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData),
-                "MeowProof", "crash.log");
-            System.IO.Directory.CreateDirectory(System.IO.Path.GetDirectoryName(path)!);
-            System.IO.File.AppendAllText(path, $"{DateTime.Now:u}\n{ex}\n\n");
+            var path = Path.Combine(AppSettings.AppDataFolder, "crash.log");
+            Directory.CreateDirectory(AppSettings.AppDataFolder);
+            File.AppendAllText(path, $"{DateTime.Now:u}\n{ex}\n\n");
         }
-        catch { /* logging must never throw */ }
+        catch { }
     }
 
     private void UpdateOverlays()
@@ -117,8 +116,6 @@ public partial class App : System.Windows.Application
     {
         if (_main is null) return;
         _main.Show();
-        if (_main.WindowState == WindowState.Minimized)
-            _main.WindowState = WindowState.Normal;
         _main.Activate();
     }
 

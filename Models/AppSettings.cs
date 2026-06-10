@@ -21,6 +21,8 @@ public class AppSettings
         Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData),
         "MeowProof", "settings.json");
 
+    public static string AppDataFolder => Path.GetDirectoryName(FilePath)!;
+
     public static AppSettings Current { get; private set; } = new();
 
     public static void Load()

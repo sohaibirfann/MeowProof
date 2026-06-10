@@ -1,4 +1,5 @@
 using System.IO;
+using System.Linq;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
@@ -44,9 +45,9 @@ public partial class SettingsWindow : Window
 
     private void PopulateSounds()
     {
-        var options = new List<SoundOption>();
-        foreach (var name in SoundService.BuiltinSounds)
-            options.Add(new SoundOption { Display = name, Value = name });
+        var options = SoundService.BuiltinSounds
+            .Select(name => new SoundOption { Display = name, Value = name })
+            .ToList();
 
         if (AppSettings.Current.CustomSoundPath is { } path)
             options.Add(new SoundOption { Display = Path.GetFileName(path), Value = "Custom" });
@@ -83,11 +84,11 @@ public partial class SettingsWindow : Window
             CheckFileExists = true,
         };
 
-        if (dlg.ShowDialog(this) == true)
+        bool imported = dlg.ShowDialog(this) == true;
+
+        if (imported)
         {
-            var destDir = Path.Combine(
-                Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData),
-                "MeowProof", "Sounds");
+            var destDir = Path.Combine(AppSettings.AppDataFolder, "Sounds");
             Directory.CreateDirectory(destDir);
             var dest = Path.Combine(destDir, Path.GetFileName(dlg.FileName));
             if (!string.Equals(dlg.FileName, dest, StringComparison.OrdinalIgnoreCase))
@@ -96,22 +97,14 @@ public partial class SettingsWindow : Window
             AppSettings.Current.CustomSoundPath = dest;
             AppSettings.Current.SelectedSound = "Custom";
             AppSettings.Save();
-
-            _loading = true;
-            PopulateSounds();
-            _loading = false;
-
-            SoundService.Preview("Custom");
         }
-        else
-        {
-            // Cancelled — revert the dropdown to the previously selected sound.
-            _loading = true;
-            var current = AppSettings.Current.SelectedSound;
-            if (SoundCombo.ItemsSource is IEnumerable<SoundOption> items)
-                SoundCombo.SelectedItem = System.Linq.Enumerable.FirstOrDefault(items, o => o.Value == current);
-            _loading = false;
-        }
+
+        // Re-populate in both cases: success selects "Custom", cancel re-selects the persisted sound.
+        _loading = true;
+        PopulateSounds();
+        _loading = false;
+
+        if (imported) SoundService.Preview("Custom");
     }
 
     private void ToggleStartup_Changed(object sender, RoutedEventArgs e)
