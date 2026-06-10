@@ -91,17 +91,16 @@ needed — and repairs the path automatically if you move the exe later.
 
 ## How cat detection works
 
-A passive keyboard hook scores recent keystrokes over a 2-second window against a
-"cat-walking" signature and auto-locks when the score stays high briefly:
+MeowProof watches your keystrokes in the background without ever blocking them. It scores recent input across four signals — how fast keys are hit, how random they are, how many are held at once, and how long they stay pressed — and auto-locks when the pattern looks more like a paw than a person.
 
 | Signal | Human | Cat |
 |---|---|---|
-| Time between keys | 80–300 ms | many under 60 ms (a paw drags across keys) |
-| Key spread | repeating, meaningful | high entropy, random across the board |
-| Keys held at once | 1–2 | 3–6 (a whole paw) |
-| Hold duration | short taps | long holds (sitting on a key) |
+| Time between keys | steady rhythm | rapid bursts, keys dragged across |
+| Key variety | repeating, intentional | random — letters, numbers, symbols all at once |
+| Keys held at once | 1–2 | 3–6 — a whole paw resting |
+| Hold duration | short taps | long holds — sitting on a key |
 
-It only runs when the feature is enabled, and never blocks your own typing.
+It resets after 5 seconds of no input and never interferes with your own typing.
 
 ## Build from source
 
