@@ -1,5 +1,6 @@
 using System.ComponentModel;
 using System.Windows;
+using MeowProof.Models;
 using System.Windows.Input;
 using System.Windows.Media;
 using MeowProof.Core;
@@ -19,9 +20,10 @@ public partial class MainWindow : Window
     {
         InitializeComponent();
         _lock = lockService;
-        _lock.StateChanged += (_, _) => Dispatcher.Invoke(UpdateState);
+        _lock.StateChanged += (_, _) => Dispatcher.BeginInvoke(UpdateState);
         _hotkey = new GlobalHotkey(_lock.Toggle);
         SourceInitialized += (_, _) => _hotkey.Register(this);
+        ShowInTaskbar = AppSettings.Current.ShowInTaskbar;
         UpdateState();
     }
 

@@ -1,4 +1,5 @@
 using MeowProof.Core;
+using MeowProof.Models;
 
 namespace MeowProof.Services;
 
@@ -36,7 +37,7 @@ public sealed class LockService : IDisposable
         if (State == LockState.Locked) return;
         State = LockState.Locked;
         _hook.Install();
-        SleepPreventer.Prevent();
+        if (AppSettings.Current.PreventSleep) SleepPreventer.Prevent();
         SoundService.PlayLocked();
         OnChanged();
     }
@@ -46,7 +47,7 @@ public sealed class LockService : IDisposable
         if (State == LockState.StealthLocked) return;
         State = LockState.StealthLocked;
         _hook.Install();
-        SleepPreventer.Prevent();
+        if (AppSettings.Current.PreventSleep) SleepPreventer.Prevent();
         SoundService.PlayLocked();
         OnChanged();
     }

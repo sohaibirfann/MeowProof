@@ -10,12 +10,6 @@
         TextOptions.TextFormattingMode="Ideal" UseLayoutRounding="True">
 
     <Window.Resources>
-        <!-- Lock button gradient, matching the mockup: linear-gradient(160deg, #D98C66, #B0633F). -->
-        <LinearGradientBrush x:Key="AccentGradient" StartPoint="0.33,0.03" EndPoint="0.67,0.97">
-            <GradientStop Color="#D98C66" Offset="0" />
-            <GradientStop Color="{StaticResource AccentDeepColor}" Offset="1" />
-        </LinearGradientBrush>
-
         <!-- Primary action button: appearance is driven from code-behind. -->
         <Style x:Key="PrimaryButton" TargetType="Button">
             <Setter Property="Height" Value="52" />

@@ -6,6 +6,7 @@ namespace MeowProof.Models;
 public class AppSettings
 {
     public bool   LaunchAtStartup       { get; set; } = false;
+    public bool   PreferStealthLock     { get; set; } = false;
     public bool   PreventSleep          { get; set; } = true;
     public bool   ShowInTaskbar         { get; set; } = false;
     public bool   CatDetectionEnabled   { get; set; } = true;

@@ -1,5 +1,6 @@
 using System.Windows;
 using Microsoft.Win32;
+using MeowProof.Core;
 using MeowProof.Models;
 using MeowProof.Services;
 using MeowProof.UI;
@@ -11,6 +12,7 @@ public partial class App : System.Windows.Application
     private LockService? _lock;
     private TrayService? _tray;
     private MainWindow? _main;
+    private CatDetector? _catDetector;
     private readonly List<OverlayWindow> _overlays = new();
 
     protected override void OnStartup(StartupEventArgs e)
@@ -26,25 +28,44 @@ public partial class App : System.Windows.Application
 
         _lock.StateChanged += (_, _) => UpdateOverlays();
 
-        // Auto-unlock when screen sleeps or the session locks — safety net so
-        // the user is never locked out of their own machine.
-        SystemEvents.PowerModeChanged  += (_, e) => { if (e.Mode == PowerModes.Suspend)          _lock.Unlock(); };
-        SystemEvents.SessionSwitch     += (_, e) => { if (e.Reason == SessionSwitchReason.SessionLock) _lock.Unlock(); };
+        // Safety net: never leave the user locked out when the machine sleeps
+        // or the session locks (Win+L).
+        SystemEvents.PowerModeChanged += (_, pe) => { if (pe.Mode == PowerModes.Suspend)              _lock.Unlock(); };
+        SystemEvents.SessionSwitch    += (_, se) => { if (se.Reason == SessionSwitchReason.SessionLock) _lock.Unlock(); };
+
+        _catDetector = new CatDetector();
+        _catDetector.CatDetected += () =>
+        {
+            if (!AppSettings.Current.CatDetectionEnabled || _lock!.IsLocked) return;
+            _lock.Lock();
+            _tray?.ShowCatNotification();
+        };
+        _catDetector.Install();
 
         _main = new MainWindow(_lock);
 
         _tray = new TrayService(_lock);
-        _tray.QuitRequested += (_, _) =>
-        {
-            if (_main is not null) _main.AllowClose = true;
-            foreach (var ov in _overlays) ov.AllowClose = true;
-            Shutdown();
-        };
-        _tray.OpenRequested += (_, _) => ShowMain();
+        _tray.QuitRequested     += (_, _) => Quit();
+        _tray.OpenRequested     += (_, _) => ShowMain();
         _tray.SettingsRequested += (_, _) => OpenSettings();
         _tray.Start();
 
         ShowMain();
+    }
+
+    [System.Runtime.InteropServices.DllImport("kernel32.dll")]
+    private static extern bool TerminateProcess(IntPtr hProcess, uint exitCode);
+
+    [System.Runtime.InteropServices.DllImport("kernel32.dll")]
+    private static extern IntPtr GetCurrentProcess();
+
+    private void Quit()
+    {
+        _tray?.HideIcon();
+        // TerminateProcess on the current process is immediate and lets the OS
+        // reclaim the keyboard hooks for us. We deliberately do NOT call
+        // UnhookWindowsHookEx here — on a low-level hook it can block.
+        TerminateProcess(GetCurrentProcess(), 0);
     }
 
     private void UpdateOverlays()
@@ -52,7 +73,7 @@ public partial class App : System.Windows.Application
         if (_lock is null) return;
         foreach (var ov in _overlays)
         {
-            if (_lock.State == Services.LockState.Locked)
+            if (_lock.State == LockState.Locked)
                 ov.Show();
             else
                 ov.Hide();
@@ -76,6 +97,9 @@ public partial class App : System.Windows.Application
 
     protected override void OnExit(ExitEventArgs e)
     {
+        // Normal quit goes through Quit() -> TerminateProcess. This only runs if
+        // WPF shuts us down by another path (e.g. Windows session ending).
+        _catDetector?.Dispose();
         _lock?.Dispose();
         _tray?.Dispose();
         base.OnExit(e);

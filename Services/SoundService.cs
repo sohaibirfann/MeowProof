@@ -34,9 +34,16 @@ public static class SoundService
     public static void Preview(string soundName) =>
         Task.Run(() => Play(soundName));
 
+    private static long _lastBlockedMs = 0;
+    private const long BlockedCooldownMs = 600;
+
     public static void PlayKeyBlocked()
     {
         if (!AppSettings.Current.PlayBlockedSound) return;
+        long now = Environment.TickCount64;
+        long last = Interlocked.Read(ref _lastBlockedMs);
+        if (now - last < BlockedCooldownMs) return;
+        Interlocked.Exchange(ref _lastBlockedMs, now);
         Task.Run(() => Play(AppSettings.Current.SelectedSound));
     }
 

@@ -31,7 +31,8 @@
             </Border>
 
             <!-- Content -->
-            <ScrollViewer Grid.Row="1" VerticalScrollBarVisibility="Auto">
+            <ScrollViewer Grid.Row="1" VerticalScrollBarVisibility="Auto"
+                          Style="{StaticResource ThinScrollViewer}">
                 <StackPanel Margin="16,14,16,20">
 
                     <!-- ── General ── -->
