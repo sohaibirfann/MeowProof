@@ -59,8 +59,8 @@ can't reproduce.
       <sub><b>Settings</b> — startup, sleep, sound, and cat detection</sub>
     </td>
     <td align="center" width="50%">
-      <img src="docs/sound-picker.png" width="100%" alt="Sound picker" /><br/>
-      <sub><b>Sound picker</b> — 7 built-in sounds or import your own</sub>
+      <img src="docs/settings-sound.png" width="100%" alt="Sound dropdown" /><br/>
+      <sub><b>Sound selector</b> — 7 built-in sounds or import your own</sub>
     </td>
   </tr>
 </table>
