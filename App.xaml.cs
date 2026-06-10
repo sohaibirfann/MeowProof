@@ -21,6 +21,10 @@ public partial class App : System.Windows.Application
 
         AppSettings.Load();
 
+        // If "Launch at Login" is on, keep the registered path pointing at
+        // wherever this exe now lives (in case it was moved/renamed).
+        StartupService.SyncPath();
+
         _lock = new LockService();
 
         foreach (var screen in System.Windows.Forms.Screen.AllScreens)
