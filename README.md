@@ -30,15 +30,15 @@ can't reproduce.
 
 ## Features
 
-- 🔒 **One-click keyboard lock** — blocks every key system-wide via a low-level hook
-- ⌨️ **Global unlock shortcut** — `Ctrl + Shift + L` locks and unlocks from anywhere
-- 🐾 **Smart cat detection** — auto-locks when it spots chaotic "paw-walking" typing
-- 🌫️ **Glassmorphism overlay** — a calm full-screen blur tells you it's locked (per-monitor)
-- 🥷 **Stealth Lock** — lock silently with no overlay
-- 🔊 **Sounds** — optional sound on lock and on each blocked key (7 built-in + import your own)
-- 💤 **Prevent display sleep** while locked, and **auto-unlock** if the screen sleeps or the session locks — so you're never locked out
-- 🚀 **Launch at login** — self-healing even if you move the exe
-- 🎨 Warm "paper & terracotta" theme with a custom tray menu
+- **One-click keyboard lock** — blocks every key system-wide via a low-level hook
+- **Global unlock shortcut** — `Ctrl + Shift + L` locks and unlocks from anywhere
+- **Smart cat detection** — auto-locks when it spots chaotic "paw-walking" typing
+- **Glassmorphism overlay** — a full-screen blur tells you it's locked (per-monitor)
+- **Stealth Lock** — lock silently with no overlay
+- **Sounds** — optional sound on lock and on each blocked key (7 built-in + import your own)
+- **Prevent display sleep** while locked, and **auto-unlock** on sleep or session lock — so you're never locked out
+- **Launch at login** — self-healing registry entry even if you move the exe
+- Warm "paper & terracotta" theme with a fully custom WPF tray menu
 
 ## Screenshots
 
