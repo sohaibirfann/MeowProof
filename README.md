@@ -6,6 +6,8 @@
 
 **Lock your keyboard so your cat can't interfere.**
 
+[Landing Page](sohaibirfann.github.io/MeowProof/)
+
 A lightweight Windows system-tray utility that instantly disables keyboard input
 when your cat decides your keyboard is the best place to nap — so you don't come
 back to 400 lines of `jjjjkkkkkkaaaa` and a closed document.
